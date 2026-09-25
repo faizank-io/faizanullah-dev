@@ -13,11 +13,11 @@ export default function ContactFooter() {
   const { profile } = portfolioData;
 
   const footerLinks = [
-    { name: "About", href: "#about" },
-    { name: "Skills", href: "#skills" },
-    { name: "Projects", href: "#projects" },
-    { name: "Architecture", href: "#architecture" },
-    { name: "Experience", href: "#experience" },
+    { name: "About", href: "/#about" },
+    { name: "Skills", href: "/#skills" },
+    { name: "Projects", href: "/#projects" },
+    { name: "Architecture", href: "/#architecture" },
+    { name: "Experience", href: "/#experience" },
   ];
 
   const socials = [
@@ -93,7 +93,7 @@ export default function ContactFooter() {
       <footer className="border-t border-border px-5 py-10 sm:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-8">
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-            <a href="#home" className="group flex items-center gap-2.5">
+            <a href="/#home" className="group flex items-center gap-2.5">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Terminal className="h-4 w-4" />
               </span>

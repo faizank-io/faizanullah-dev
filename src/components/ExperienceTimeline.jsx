@@ -105,7 +105,7 @@ export default function ExperienceTimeline() {
                       aria-expanded={on}
                       className={cn(
                         "group w-full rounded-2xl border bg-card p-5 text-left transition-all duration-300 sm:p-6",
-                        on ? "neon-border shadow-[var(--shadow-md)]" : "border-border hover:border-primary/30 hover:shadow-[var(--shadow-sm)]"
+                        on ? "neon-border border-primary/40 shadow-[var(--shadow-md)]" : "border border-border hover:border-primary/30 hover:shadow-[var(--shadow-sm)]"
                       )}
                     >
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">

@@ -207,8 +207,8 @@ export default function ProjectDetailPage({ project, projectId }) {
           </Reveal>
 
           <Reveal delay={0.06} className="mt-5">
-            <div className="neon-border overflow-hidden rounded-2xl bg-[#080318]">
-              <div className="flex items-center justify-between border-b border-white/[0.06] bg-[#0a0520] px-4 py-2.5">
+            <div className="neon-border overflow-hidden rounded-2xl bg-[#0a0a0a]">
+              <div className="flex items-center justify-between border-b border-white/[0.06] bg-[#111111] px-4 py-2.5">
                 <div className="flex items-center gap-3">
                   <div className="flex gap-1.5">
                     <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />

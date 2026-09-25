@@ -7,13 +7,13 @@ import { Menu, X, Sun, Moon, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Terminal", href: "#terminal" },
-  { label: "Projects", href: "#projects" },
-  { label: "Architecture", href: "#architecture" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Terminal", href: "/#terminal" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Architecture", href: "/#architecture" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Header() {
@@ -54,7 +54,7 @@ export default function Header() {
                 : "border-transparent bg-transparent"
             )}
           >
-            <a href="#home" className="group flex items-center gap-2.5">
+            <a href="/#home" className="group flex items-center gap-2.5">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                 <Terminal className="h-4 w-4" />
               </span>

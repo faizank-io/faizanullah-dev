@@ -39,7 +39,7 @@ function Counter({ end, suffix = "", duration = 2200 }) {
 
 const dashboardCards = [
   { icon: <Activity className="h-4 w-4" />, label: "Uptime", value: 99.9, suffix: "%", color: "text-emerald-400" },
-  { icon: <Cpu className="h-4 w-4" />, label: "Projects", value: 26, suffix: "+", color: "text-violet-400" },
+  { icon: <Cpu className="h-4 w-4" />, label: "Projects", value: 28, suffix: "+", color: "text-violet-400" },
   { icon: <Database className="h-4 w-4" />, label: "API Response", value: 45, suffix: "ms", color: "text-cyan-400" },
   { icon: <Wifi className="h-4 w-4" />, label: "Tenants", value: 5, suffix: "+", color: "text-amber-400" },
 ];

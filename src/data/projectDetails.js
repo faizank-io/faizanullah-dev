@@ -1,4 +1,221 @@
 export const projectDetails = {
+  printprima: {
+    title: "Print Prima — Print Shop Management SaaS",
+    subtitle: "Quote-to-Cash, Production Queues & Printer Audit for Large-Format Print Shops",
+    liveUrl: "https://www.printprima.com/",
+    githubUrl: null,
+    techStack: ["Laravel", "PHP 8.2", "Livewire", "MySQL", "SaaS", "Subscription Billing", "RBAC", "Multi-Branch"],
+    badge: "Live SaaS",
+    metrics: [
+      { label: "Invoice Errors", value: "-98", unit: "%" },
+      { label: "Job Turnaround", value: "50%+", unit: "faster" },
+      { label: "Full Onboarding", value: "14", unit: "days" },
+      { label: "Subscription Plans", value: "5", unit: "tiers" },
+    ],
+    overview:
+      "Print Prima is a cloud SaaS that runs an entire large-format print business from one dashboard: quotes and invoices, order and job flow, inventory and stores, fixed assets, payroll, expenses, staff permissions, and a print audit that reads job data straight from the printers. It is built for shops ranging from a few machines to multi-branch operations, with Nigeria-ready taxes and NGN pricing alongside USD, and is sold on tiered plans gated by the number of printers monitored.",
+    architecture: {
+      description:
+        "Built on Laravel with Livewire-driven dashboards. Every shop is an isolated account with its own branches, staff roles, and plan limits. A quote becomes an invoice, then a production job that moves through a machine queue; material usage is deducted from inventory as the job runs, and what the printer actually reports is reconciled against what was invoiced to surface unbilled prints.",
+      flow: [
+        "Quote / Invoice (Front Desk)",
+        "Proof Approval",
+        "Job Queue & Machine Assignment",
+        "Printer Audit Capture",
+        "Inventory Deduction",
+        "Invoice-vs-Print Reconciliation",
+        "Branch KPI Roll-Up",
+      ],
+      highlights: [
+        "Role-based views for Front Desk, Production, Finance, and Management over the same underlying job data",
+        "Print audit capturing dimensions, bitmaps, status, and timings from each printer for every job",
+        "Plan-level feature gating — printer monitoring limits of 3, 6, 10, or unlimited per subscription tier",
+        "Multi-branch access with activity trails and KPI roll-ups across locations",
+      ],
+    },
+    challenges: [
+      {
+        title: "Catching Unbilled Prints (Theft Prevention)",
+        problem:
+          "In a print shop, staff can run jobs on a machine that never appear on an invoice. Owners had no way to compare what was printed with what was sold.",
+        solution:
+          "Built a print audit pipeline that records dimensions, preview bitmaps, status, and timings from each printer, then matches every captured print against an invoiced job. Prints with no matching job, or with a size that doesn't match the order, are flagged as anomalies for management.",
+        result: "Owners get a real-time view of every print per machine, with unmatched jobs surfaced instead of discovered at stock-take.",
+      },
+      {
+        title: "One Workflow from Quote to Cash",
+        problem:
+          "Quotes, production, stock, and payments typically live in separate spreadsheets and paper job tickets, so invoices get re-typed and jobs get lost between front desk and production.",
+        solution:
+          "Modelled the order as a single record that changes state — quote, invoice, proof approval, queued, printing, done, paid — so each team works on the same job from its own role-based view, with automated follow-ups on unpaid invoices.",
+        result: "Shops on the platform report 98% fewer invoice errors and 50%+ faster job turnaround.",
+      },
+      {
+        title: "Subscription Tiers with Hard Limits",
+        problem:
+          "Plans differ by printers monitored and feature set (Base Pack has no monitoring; Starter, Pro, and Pro Plus allow 3, 6, and 10 printers), billed monthly, quarterly, or yearly in USD or NGN.",
+        solution:
+          "Centralised plan entitlements in one service that every module checks before enabling a feature or registering a printer, so limits are enforced server-side rather than hidden in the UI.",
+        result: "Five tiers and three billing cycles run from a single entitlement layer, and upgrading a plan unlocks capacity immediately.",
+      },
+    ],
+    features: [
+      { title: "Invoices & Quotes", description: "Quote-to-invoice conversion with automated follow-ups, collections tracking, and Nigerian tax and NGN support." },
+      { title: "Order & Job Flow", description: "Intelligent production queues with proof approvals and machine assignment, visible live to the production floor." },
+      { title: "Inventory & Fixed Assets", description: "Stock tracking for SAV, flex, canvas, and consumables with low-stock alerts, plus asset registration, depreciation, and maintenance scheduling." },
+      { title: "Print Audit & Theft Prevention", description: "Real-time printer monitoring that captures each print and flags anomalies against invoiced jobs." },
+      { title: "Staff, Payroll & Expenses", description: "Roles and permissions with activity trails, payroll management, and expense tracking across branches." },
+      { title: "Management Reporting", description: "KPIs, aging reports, and branch roll-ups for owners running more than one location." },
+    ],
+    codeSnippet: {
+      title: "PrintAuditService — Matching Printer Output to Invoiced Jobs",
+      language: "php",
+      code: `<?php
+
+namespace App\\Services;
+
+use App\\Events\\PrintAnomalyDetected;
+use App\\Models\\PrintJob;
+use App\\Models\\PrintLog;
+
+class PrintAuditService
+{
+    private const AREA_TOLERANCE = 0.05; // 5% over the invoiced size
+
+    public function reconcile(PrintLog \$log): void
+    {
+        \$job = PrintJob::where('printer_id', \$log->printer_id)
+            ->where('file_name', \$log->file_name)
+            ->whereIn('status', ['queued', 'printing'])
+            ->first();
+
+        if (! \$job) {
+            \$this->flag(\$log, 'unbilled_print');
+            return;
+        }
+
+        \$allowedArea = \$job->width * \$job->height * (1 + self::AREA_TOLERANCE);
+
+        if (\$log->width * \$log->height > \$allowedArea) {
+            \$this->flag(\$log, 'oversized_print', \$job);
+        }
+
+        \$log->update(['print_job_id' => \$job->id]);
+    }
+
+    private function flag(PrintLog \$log, string \$reason, ?PrintJob \$job = null): void
+    {
+        \$log->update(['anomaly' => \$reason]);
+
+        event(new PrintAnomalyDetected(\$log, \$job));
+    }
+}`,
+    },
+  },
+
+  "5brain": {
+    title: "5 Brain Abilities — Child Assessment Platform",
+    subtitle: "Paid Online Brain-Ability Assessment for Parents",
+    liveUrl: "https://5brain.org/",
+    githubUrl: null,
+    techStack: ["Laravel", "PHP", "MySQL", "Payment Gateway", "OTP Auth", "Admin Panel", "EdTech"],
+    badge: "Live Platform",
+    metrics: [
+      { label: "Abilities Assessed", value: "5", unit: "domains" },
+      { label: "One-Time Price", value: "$24.95", unit: "USD" },
+      { label: "Account Verification", value: "OTP", unit: "email" },
+      { label: "User Roles", value: "2", unit: "parent / admin" },
+    ],
+    overview:
+      "5 Brain Abilities is an online assessment service from Math Monkey (Malaysia) that helps parents understand their child's five core brain abilities — Attention, Cognitive Visual, Memory, Logical Reasoning, and Processing Speed — and choose learning activities that fit. Parents sign up, verify by OTP, pay a one-time fee, add a child profile, and take the child through the assessment; a separate admin login manages the platform.",
+    architecture: {
+      description:
+        "A Laravel application with two guarded areas: a parent account area and an admin panel. Registration and password recovery are gated by emailed one-time codes, the assessment unlocks only after payment is confirmed, and each attempt is stored against a child profile so one parent can assess more than one child.",
+      flow: [
+        "Parent Signup",
+        "Email OTP Verification",
+        "One-Time Payment",
+        "Child Profile Selection",
+        "Five-Ability Assessment",
+        "Per-Ability Scoring",
+        "Results for the Parent",
+      ],
+      highlights: [
+        "OTP-verified signup and OTP-based password reset instead of emailed reset links",
+        "Assessment access unlocked server-side only after a confirmed payment",
+        "Multiple child profiles per parent account, each with its own assessment",
+        "Separate admin login for managing users, assessments, and contact enquiries",
+      ],
+    },
+    challenges: [
+      {
+        title: "Gating a Paid Assessment",
+        problem:
+          "The assessment is the product, so it must be reachable only by parents who have paid, and a refreshed or abandoned checkout must never grant access or charge twice.",
+        solution:
+          "Kept payment state on the server and unlocked the assessment from the gateway's confirmation rather than from the browser redirect, with the unlock written idempotently against the parent account.",
+        result: "Access follows confirmed payments only, and repeat confirmations for the same payment are harmless.",
+      },
+      {
+        title: "Scoring Five Abilities from One Sitting",
+        problem:
+          "A single assessment has to produce a separate, comparable result for each of five different abilities, not one overall mark.",
+        solution:
+          "Tagged every question with the ability it measures and scored each ability independently as a percentage of its own maximum, so results stay comparable even when abilities have different numbers of questions.",
+        result: "Parents see a per-ability breakdown that shows which abilities are stronger and which need support.",
+      },
+      {
+        title: "Verified Accounts for an International Audience",
+        problem:
+          "Parents sign up from different countries, and unverified or mistyped emails would leave paid accounts unrecoverable.",
+        solution:
+          "Added an OTP step to signup and to password recovery, with expiring single-use codes and a country selector on the registration and contact forms.",
+        result: "Every paying account is tied to an email address the parent has proven they can receive mail at.",
+      },
+    ],
+    features: [
+      { title: "Five-Ability Assessment", description: "Covers Attention, Cognitive Visual, Memory, Logical Reasoning, and Processing Speed in one guided assessment." },
+      { title: "Child Profiles", description: "Parents add a child or pick an existing one before starting, keeping each child's results separate." },
+      { title: "OTP Signup & Recovery", description: "Email one-time codes verify new accounts and authorise password resets." },
+      { title: "One-Time Payment", description: "A single USD $24.95 checkout unlocks the assessment — no subscription." },
+      { title: "Admin Panel", description: "Separate admin login for managing parents, assessments, and incoming enquiries." },
+      { title: "Parent Education Content", description: "Explains each ability, how the brain works, and growth vs. fixed mindset, with FAQ and contact pages." },
+    ],
+    codeSnippet: {
+      title: "AssessmentScoringService — Per-Ability Results",
+      language: "php",
+      code: `<?php
+
+namespace App\\Services;
+
+use App\\Models\\AssessmentAttempt;
+
+class AssessmentScoringService
+{
+    public function score(AssessmentAttempt \$attempt): array
+    {
+        \$results = \$attempt->answers()
+            ->with('question.ability')
+            ->get()
+            ->groupBy(fn (\$answer) => \$answer->question->ability->slug)
+            ->map(function (\$answers) {
+                \$earned = \$answers->where('is_correct', true)->sum('question.weight');
+                \$maximum = \$answers->sum('question.weight');
+
+                return \$maximum > 0 ? round((\$earned / \$maximum) * 100) : 0;
+            });
+
+        \$attempt->update([
+            'results' => \$results,
+            'completed_at' => now(),
+        ]);
+
+        return \$results->all();
+    }
+}`,
+    },
+  },
+
   lejabook: {
     title: "Leja Book — Online Booking Platform",
     subtitle: "Multi-Tenant Service Scheduling & Payments SaaS",

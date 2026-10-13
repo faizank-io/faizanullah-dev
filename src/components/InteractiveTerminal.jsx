@@ -98,7 +98,7 @@ const commands = {
       "  Faizan Ullah",
       "  Senior Backend Engineer & API Architect",
       "  Laravel · PHP 8.1+ · WebSockets · MySQL",
-      "  3.5+ years · 26 projects · Karachi, PK",
+      "  3.5+ years · 28 projects · Karachi, PK",
       "",
       "  // Systems that never break.",
     ],

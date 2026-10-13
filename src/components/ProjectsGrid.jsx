@@ -46,7 +46,7 @@ export default function ProjectsGrid() {
           <Reveal delay={0.08}>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3">
-                <span className="font-mono text-xl font-bold text-primary">17</span>
+                <span className="font-mono text-xl font-bold text-primary">19</span>
                 <span className="text-xs text-muted-foreground leading-tight">Live<br />platforms</span>
               </div>
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3">

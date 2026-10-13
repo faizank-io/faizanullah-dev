@@ -23,6 +23,8 @@ import {
   Tag,
   Heart,
   Building2,
+  Printer,
+  Brain,
 } from "lucide-react";
 
 export const portfolioData = {
@@ -71,6 +73,30 @@ export const portfolioData = {
     "Mobile App APIs",
   ],
   projects: [
+    {
+      id: "printprima",
+      title: "Print Prima — Print Shop Management SaaS",
+      description:
+        "All-in-one cloud SaaS for large-format print shops covering quote-to-cash, job queues, inventory, fixed assets, payroll, staff audit, and real-time printer monitoring for theft prevention, sold on tiered subscription plans.",
+      tags: ["Laravel", "Livewire", "MySQL", "SaaS", "Subscription Billing", "RBAC"],
+      category: "SaaS & Enterprise",
+      image: "/projects/printprima.png",
+      link: "https://www.printprima.com/",
+      badge: "Live SaaS",
+      icon: <Printer className="w-5 h-5 text-emerald-400" />,
+    },
+    {
+      id: "5brain",
+      title: "5 Brain Abilities — Child Assessment Platform",
+      description:
+        "Paid online assessment platform that lets parents evaluate their child's five core brain abilities — attention, cognitive visual, memory, logical reasoning, and processing speed — with OTP-verified accounts, child profiles, and an admin panel.",
+      tags: ["Laravel", "PHP", "MySQL", "Payment Gateway", "EdTech"],
+      category: "Live Websites & Apps",
+      image: "/projects/5brain.png",
+      link: "https://5brain.org/",
+      badge: "Live Platform",
+      icon: <Brain className="w-5 h-5 text-orange-400" />,
+    },
     {
       id: "lejabook",
       title: "Leja Book — Online Booking Platform",

@@ -13,7 +13,7 @@ const roleDetails = {
     badge: "Senior",
     type: "Full-Time",
     highlights: [
-      "Designed RESTful backend APIs supporting 11+ mobile applications (iOS & Android).",
+      "Designed RESTful backend APIs supporting 9 mobile applications (iOS & Android).",
       "Integrated Stripe Connect, M-Pesa, QuickBooks API and CRM systems.",
       "Optimized database indexing and caching for high-concurrency API performance.",
     ],

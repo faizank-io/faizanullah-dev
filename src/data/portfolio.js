@@ -33,6 +33,7 @@ import {
   ShoppingBag,
   Store,
   Wallet,
+  Bot,
 } from "lucide-react";
 
 export const portfolioData = {
@@ -90,6 +91,7 @@ export const portfolioData = {
     "smartworldkenya",
     "moneyinfocus",
     "nexusstudent",
+    "tiger-ai-assistant",
     "crmlogy",
     "printprima",
     "digistoredirect",
@@ -117,8 +119,22 @@ export const portfolioData = {
     "Live Websites & Apps",
     "SaaS & Enterprise",
     "Mobile App APIs",
+    "AI & Automation",
   ],
   projects: [
+    {
+      id: "tiger-ai-assistant",
+      title: "TIGER — AI Voice Assistant",
+      description:
+        "A real-time desktop AI assistant that listens, speaks and controls the computer: holographic HUD with a lip-synced avatar, live system monitor, news and weather, web search, file handling and app control — understands English and Urdu, replies in English.",
+      tags: ["Python", "Gemini Live API", "PyQt6", "Voice AI", "Automation"],
+      category: "AI & Automation",
+      image: "/projects/tiger-ai-demo.png",
+      video: "/projects/tiger-ai-demo.mp4",
+      link: null,
+      badge: "AI Assistant · Demo Video",
+      icon: <Bot className="w-5 h-5 text-cyan-400" />,
+    },
     {
       id: "printprima",
       title: "Print Prima — Print Shop Management SaaS",

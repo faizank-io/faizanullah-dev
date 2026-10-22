@@ -44,6 +44,9 @@ export default function ProjectDetailPage({ project, projectId }) {
             {project.title}
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">{project.subtitle}</p>
+          {project.credit && (
+            <p className="mt-3 text-sm text-muted-foreground/90">{project.credit}</p>
+          )}
 
           <div className="mt-5 flex flex-wrap gap-3">
             {project.liveUrl && (
@@ -90,15 +93,29 @@ export default function ProjectDetailPage({ project, projectId }) {
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
                 </div>
                 <span className="ml-2 truncate font-mono text-[11px] text-muted-foreground">
-                  {project.liveUrl ? project.liveUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "") : "iOS & Android · REST API"}
+                  {project.liveUrl
+                    ? project.liveUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")
+                    : cover.video ? "Demo video · recorded on desktop" : "iOS & Android · REST API"}
                 </span>
                 {cover.concept && (
                   <span className="ml-auto shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">UI concept</span>
                 )}
               </div>
-              <div className="relative aspect-[16/10]">
-                <Image src={cover.image} alt={`${project.title} — screenshot`} fill preload sizes="(max-width:1024px) 100vw, 960px" className="object-cover object-top" />
-              </div>
+              {cover.video ? (
+                <video
+                  src={cover.video}
+                  poster={cover.image}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="block w-full bg-black"
+                  aria-label={`${project.title} — demo video`}
+                />
+              ) : (
+                <div className="relative aspect-[16/10]">
+                  <Image src={cover.image} alt={`${project.title} — screenshot`} fill preload sizes="(max-width:1024px) 100vw, 960px" className="object-cover object-top" />
+                </div>
+              )}
             </div>
           </Reveal>
         )}
@@ -147,6 +164,7 @@ export default function ProjectDetailPage({ project, projectId }) {
       </section>
 
       {/* Challenges */}
+      {project.challenges?.length > 0 && (
       <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
@@ -179,6 +197,7 @@ export default function ProjectDetailPage({ project, projectId }) {
           ))}
         </div>
       </section>
+      )}
 
       {/* Features */}
       <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ArrowRight, ChevronDown, Lock } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ChevronDown, Lock, Play } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
 import { getProjectDetail } from "@/data/projectDetails";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,7 @@ const tabLabels = {
   "Live Websites & Apps": "Websites & Apps",
   "SaaS & Enterprise": "SaaS & Enterprise",
   "Mobile App APIs": "Mobile App APIs",
+  "AI & Automation": "AI & Automation",
 };
 
 function hostname(url) {
@@ -147,7 +148,7 @@ function ProjectCard({ project, index, large }) {
             </div>
             <span className="ml-1 flex min-w-0 items-center gap-1 truncate font-mono text-[10px] text-muted-foreground">
               <Lock className="h-2.5 w-2.5 shrink-0" />
-              {host || "iOS & Android · REST API"}
+              {host || (project.video ? "Desktop app · demo video" : "iOS & Android · REST API")}
             </span>
           </div>
           <div className={cn("relative aspect-[16/10] overflow-hidden", large && "lg:aspect-auto lg:flex-1 lg:min-h-[300px]")}>
@@ -158,6 +159,18 @@ function ProjectCard({ project, index, large }) {
               sizes={large ? "(max-width:768px) 100vw, 760px" : "(max-width:768px) 100vw, (max-width:1024px) 50vw, 380px"}
               className="object-cover object-top transition-transform duration-[1.2s] ease-out group-hover:scale-[1.05]"
             />
+            {project.video && (
+              <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-black shadow-lg transition-transform duration-500 group-hover:scale-110">
+                  <Play className="ml-0.5 h-6 w-6 fill-current" />
+                </span>
+              </span>
+            )}
+            {project.video && (
+              <span className="absolute right-2.5 top-2.5 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
+                Watch demo
+              </span>
+            )}
             {project.concept && (
               <span className="absolute right-2.5 top-2.5 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
                 UI concept

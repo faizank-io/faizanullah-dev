@@ -1,4 +1,5 @@
 import { mobileAppDetails } from "./mobileAppDetails";
+import { aiProjectDetails } from "./aiProjectDetails";
 
 const baseProjectDetails = {
   printprima: {
@@ -2028,7 +2029,7 @@ class FCMNotificationService
   },
 };
 
-export const projectDetails = { ...baseProjectDetails, ...mobileAppDetails };
+export const projectDetails = { ...baseProjectDetails, ...mobileAppDetails, ...aiProjectDetails };
 
 export function getProjectDetail(id) {
   return projectDetails[id] || null;

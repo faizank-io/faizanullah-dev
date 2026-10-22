@@ -1,124 +1,114 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, ArrowRight, ChevronDown, Lock } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
-import { getAllProjectIds } from "@/data/projectDetails";
-import { Search, ArrowUpRight, X, Layers, Lock, CheckCircle2 } from "lucide-react";
+import { getProjectDetail } from "@/data/projectDetails";
 import { cn } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
+
+const INITIAL_COUNT = 6;
+const ease = [0.22, 1, 0.36, 1];
+
+const tabLabels = {
+  All: "All work",
+  "Live Websites & Apps": "Websites & Apps",
+  "SaaS & Enterprise": "SaaS & Enterprise",
+  "Mobile App APIs": "Mobile App APIs",
+};
+
+function hostname(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
 
 export default function ProjectsGrid() {
-  const { projects, projectCategories } = portfolioData;
-  const reduce = useReducedMotion();
+  const { projects, projectOrder, projectCategories } = portfolioData;
   const [cat, setCat] = useState("All");
-  const [q, setQ] = useState("");
-  const detailIds = getAllProjectIds();
+  const [showAll, setShowAll] = useState(false);
 
-  const filtered = projects.filter((p) => {
-    const matchCat = cat === "All" || p.category === cat;
-    const matchQ = !q || [p.title, p.description, ...p.tags].some((s) => s.toLowerCase().includes(q.toLowerCase()));
-    return matchCat && matchQ;
-  });
+  const byId = Object.fromEntries(projects.map((p) => [p.id, p]));
+  const ordered = [
+    ...projectOrder.map((id) => byId[id]).filter(Boolean),
+    ...projects.filter((p) => !projectOrder.includes(p.id)),
+  ];
+  const filtered = ordered.filter((p) => cat === "All" || p.category === cat);
+  const visible = showAll ? filtered : filtered.slice(0, INITIAL_COUNT);
 
-  const featured = filtered.find((p) => p.highlight);
-  const rest = filtered.filter((p) => p !== featured);
+  const selectCategory = (c) => {
+    setCat(c);
+    setShowAll(false);
+  };
 
   return (
     <section id="projects" className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:py-32">
-      <div className="pointer-events-none absolute right-0 top-1/4 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-[150px]" />
-
       <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <Reveal>
-            <div className="flex items-center gap-3 text-primary">
-              <span className="h-px w-8 bg-primary/50" />
-              <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em]">03 / Projects</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Shipped, production systems.
-            </h2>
-          </Reveal>
+        <Reveal>
+          <SectionHeading
+            eyebrow="Selected work"
+            title={<>Products I&apos;ve built <span className="text-gradient font-serif-accent">and shipped.</span></>}
+            description="Live platforms used by real businesses and their customers — each one designed, built and launched end to end."
+          />
+        </Reveal>
 
-          <Reveal delay={0.08}>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3">
-                <span className="font-mono text-xl font-bold text-primary">19</span>
-                <span className="text-xs text-muted-foreground leading-tight">Live<br />platforms</span>
-              </div>
-              <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3">
-                <span className="font-mono text-xl font-bold text-primary">9</span>
-                <span className="text-xs text-muted-foreground leading-tight">Mobile<br />backends</span>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Toolbar */}
-        <Reveal delay={0.1} className="mt-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
-              {projectCategories.map((c) => {
-                const count = c === "All" ? projects.length : projects.filter((p) => p.category === c).length;
-                return (
-                  <button
-                    key={c}
-                    onClick={() => setCat(c)}
-                    className={cn(
-                      "inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300",
-                      cat === c
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                    )}
-                  >
-                    {c}
-                    <span className={cn("rounded-full px-1.5 py-0.5 text-[11px] font-bold", cat === c ? "bg-primary-foreground/20" : "bg-muted")}>{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search..."
-                className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-9 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none"
-              />
-              {q && (
-                <button onClick={() => setQ("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                  <X className="h-4 w-4" />
+        <Reveal delay={0.08} className="mt-10">
+          <div
+            role="group"
+            aria-label="Filter projects by category"
+            className="inline-flex max-w-full gap-1 overflow-x-auto rounded-2xl border border-border bg-card p-1.5 shadow-[var(--shadow-xs)] scrollbar-none"
+          >
+            {projectCategories.map((c) => {
+              const count = c === "All" ? projects.length : projects.filter((p) => p.category === c).length;
+              const on = cat === c;
+              return (
+                <button
+                  key={c}
+                  aria-pressed={on}
+                  onClick={() => selectCategory(c)}
+                  className={cn(
+                    "relative inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-300",
+                    on ? "text-background" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {on && (
+                    <motion.span
+                      layoutId="project-tab"
+                      className="absolute inset-0 rounded-xl bg-foreground"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">{tabLabels[c] || c}</span>
+                  <span className={cn("relative text-xs font-bold", on ? "opacity-70" : "opacity-50")}>{count}</span>
                 </button>
-              )}
-            </div>
+              );
+            })}
           </div>
         </Reveal>
 
-        {/* Empty */}
-        {filtered.length === 0 && (
-          <div className="mt-10 flex flex-col items-center gap-3 rounded-3xl border border-border bg-card py-20 text-center">
-            <p className="text-lg font-semibold text-foreground">No projects found</p>
-            <button onClick={() => { setQ(""); setCat("All"); }} className="mt-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Reset filters</button>
-          </div>
-        )}
+        <motion.div layout className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visible.map((p, i) => (
+              <ProjectCard key={`${cat}-${p.id}`} project={p} index={i} large={i === 0} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
-        {filtered.length > 0 && (
-          <div className="mt-8">
-            {/* Featured */}
-            {featured && <FeaturedCard project={featured} reduce={reduce} hasDetail={detailIds.includes(featured.id)} />}
-
-            {/* Grid */}
-            <motion.div layout className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <AnimatePresence mode="popLayout">
-                {rest.map((p, i) => (
-                  <Card key={p.id} project={p} idx={i} reduce={reduce} hasDetail={detailIds.includes(p.id)} />
-                ))}
-              </AnimatePresence>
-            </motion.div>
+        {filtered.length > INITIAL_COUNT && (
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={() => setShowAll((v) => !v)}
+              className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground shadow-[var(--shadow-xs)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40"
+            >
+              {showAll ? "Show less" : `View all ${filtered.length} projects`}
+              <ChevronDown className={cn("h-4 w-4 transition-transform duration-300", showAll && "rotate-180")} />
+            </button>
           </div>
         )}
       </div>
@@ -126,98 +116,107 @@ export default function ProjectsGrid() {
   );
 }
 
-function FeaturedCard({ project, reduce, hasDetail }) {
+function ProjectCard({ project, index, large }) {
+  const detail = getProjectDetail(project.id);
+  const metrics = large ? detail?.metrics?.slice(0, 3) ?? [] : [];
+  const host = hostname(project.link);
+
   return (
     <motion.article
       layout
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="neon-border group grid overflow-hidden rounded-3xl bg-card lg:grid-cols-[1.15fr_1fr]"
-    >
-      <div className="relative aspect-[16/10] overflow-hidden lg:aspect-auto lg:h-full">
-        <Image src={project.image} alt={project.title} fill unoptimized sizes="(max-width:1024px) 100vw, 55vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-card via-card/20 to-transparent lg:bg-gradient-to-r" />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-foreground backdrop-blur-md">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary" />Featured
-        </span>
-      </div>
-
-      <div className="flex flex-col justify-center gap-4 p-7 sm:p-9">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-muted text-primary">{project.icon || <Layers className="h-4 w-4" />}</span>
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{project.category}</span>
-        </div>
-        <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{project.title}</h3>
-        <p className="text-sm leading-relaxed text-muted-foreground">{project.description}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((t) => <span key={t} className="rounded-md border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">{t}</span>)}
-        </div>
-        <div className="mt-2 flex flex-wrap gap-3">
-          {project.link && (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]">
-              Visit live <ArrowUpRight className="h-4 w-4" />
-            </a>
-          )}
-          {hasDetail && (
-            <Link href={`/projects/${project.id}`} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm font-semibold text-primary transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground">
-              Case study <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          )}
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-function Card({ project, idx, reduce, hasDetail }) {
-  return (
-    <motion.article
-      layout
-      initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 16 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.25), ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-md)]"
+      transition={{ duration: 0.5, delay: Math.min((index % INITIAL_COUNT) * 0.06, 0.3), ease }}
+      className={cn(
+        "surface surface-hover group relative flex flex-col overflow-hidden rounded-3xl",
+        large && "md:col-span-2 lg:row-span-2"
+      )}
     >
-      <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-        <Image src={project.image} alt={project.title} fill unoptimized sizes="(max-width:768px) 100vw, 33vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.05]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-card/70 via-transparent to-transparent opacity-50" />
-        {project.badge && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/80 px-2.5 py-1 text-[11px] font-semibold backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />{project.badge}
-          </span>
-        )}
-      </div>
+      {/* Whole card opens the case study; the live-site button sits above this layer. */}
+      <Link href={`/projects/${project.id}`} className="absolute inset-0 z-10" aria-label={`${project.title} — case study`} />
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex items-start gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-primary">{project.icon || <Layers className="h-4 w-4" />}</span>
-          <div className="min-w-0">
-            <h3 className="text-[15px] font-semibold leading-snug text-foreground group-hover:text-primary transition-colors">{project.title}</h3>
-            {project.credentials && <div className="mt-0.5 flex items-center gap-1 font-mono text-[11px] text-muted-foreground"><Lock className="h-3 w-3" />{project.credentials}</div>}
+      {/* Browser-framed screenshot */}
+      <div className={cn("p-2.5 pb-0", large && "flex flex-1 flex-col")}>
+        <div className={cn("overflow-hidden rounded-2xl border border-border bg-muted", large && "flex flex-1 flex-col")}>
+          <div className="flex items-center gap-2 border-b border-border bg-elevated px-3 py-2">
+            <div className="flex gap-1" aria-hidden="true">
+              <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+              <span className="h-2 w-2 rounded-full bg-[#ffbd2e]" />
+              <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+            </div>
+            <span className="ml-1 flex min-w-0 items-center gap-1 truncate font-mono text-[10px] text-muted-foreground">
+              <Lock className="h-2.5 w-2.5 shrink-0" />
+              {host || "iOS & Android · REST API"}
+            </span>
+          </div>
+          <div className={cn("relative aspect-[16/10] overflow-hidden", large && "lg:aspect-auto lg:flex-1 lg:min-h-[300px]")}>
+            <Image
+              src={project.image}
+              alt={`${project.title} — screenshot`}
+              fill
+              sizes={large ? "(max-width:768px) 100vw, 760px" : "(max-width:768px) 100vw, (max-width:1024px) 50vw, 380px"}
+              className="object-cover object-top transition-transform duration-[1.2s] ease-out group-hover:scale-[1.05]"
+            />
+            {project.concept && (
+              <span className="absolute right-2.5 top-2.5 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
+                UI concept
+              </span>
+            )}
+            <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/55 via-black/0 to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+              <span className="inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black shadow-lg transition-transform duration-500 group-hover:translate-y-0">
+                View case study <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            </div>
           </div>
         </div>
-        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">{project.description}</p>
-        <div className="mt-auto flex flex-wrap gap-1.5 border-t border-border/50 pt-3">
-          {project.tags.slice(0, 4).map((t) => <span key={t} className="rounded-md border border-border/60 bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">{t}</span>)}
-        </div>
-        <div className="flex flex-col gap-2">
-          {project.link ? (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-between rounded-xl border border-border bg-muted/30 px-4 py-2 text-xs font-semibold text-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground">
-              Visit live <ArrowUpRight className="h-3.5 w-3.5" />
+      </div>
+
+      {/* Details */}
+      <div className={cn("flex flex-col p-5", large && "sm:p-7")}>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">{project.badge}</span>
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${project.title} live`}
+              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+            >
+              Live <ArrowUpRight className="h-3 w-3" />
             </a>
-          ) : (
-            <div className="inline-flex w-full items-center justify-between rounded-xl border border-border/40 bg-muted/20 px-4 py-2 text-xs text-muted-foreground">
-              API backend <CheckCircle2 className="h-3.5 w-3.5 text-success" />
-            </div>
           )}
-          {hasDetail && (
-            <Link href={`/projects/${project.id}`} className="inline-flex w-full items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-2 text-xs font-semibold text-primary transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground">
-              View case study <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
-          )}
+        </div>
+
+        <h3 className={cn(
+          "mt-2.5 font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary",
+          large ? "text-xl sm:text-2xl" : "text-[17px]"
+        )}>
+          {project.title}
+        </h3>
+
+        {large && (
+          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-[15px]">{project.description}</p>
+        )}
+
+        {metrics.length > 0 && (
+          <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
+            {metrics.map((m) => (
+              <div key={m.label} className="flex flex-col-reverse">
+                <dt className="text-xs text-muted-foreground">{m.label}</dt>
+                <dd className="text-xl font-bold tracking-tight text-foreground">
+                  {m.value}{m.unit === "%" && "%"}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {project.tags.slice(0, large ? 5 : 3).map((t) => (
+            <span key={t} className="rounded-md bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">{t}</span>
+          ))}
         </div>
       </div>
     </motion.article>

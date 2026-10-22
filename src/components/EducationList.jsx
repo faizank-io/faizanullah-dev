@@ -4,6 +4,7 @@ import { portfolioData } from "@/data/portfolio";
 import { GraduationCap, Award, BookOpen, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const meta = [
   {
@@ -22,15 +23,15 @@ const meta = [
   },
   {
     status: "Completed",
-    statusCls: "bg-indigo-500/10 text-indigo-400 border-indigo-500/25",
-    icon: <BookOpen className="h-4 w-4 text-indigo-400" />,
+    statusCls: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25",
+    icon: <BookOpen className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />,
     accent: "from-indigo-500/60",
     focus: ["CS & Physics", "Mathematics"],
   },
   {
     status: "Completed",
-    statusCls: "bg-amber-500/10 text-amber-400 border-amber-500/25",
-    icon: <BookOpen className="h-4 w-4 text-amber-400" />,
+    statusCls: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25",
+    icon: <BookOpen className="h-4 w-4 text-amber-600 dark:text-amber-400" />,
     accent: "from-amber-500/60",
     focus: ["Science Foundations"],
   },
@@ -40,18 +41,13 @@ export default function EducationList() {
   const { education } = portfolioData;
 
   return (
-    <section id="education" className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:py-32">
-      <div className="pointer-events-none absolute right-0 top-1/4 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-[150px]" />
-
+    <section id="education" className="relative scroll-mt-20 px-5 pb-24 pt-4 sm:px-8 md:pb-32">
       <div className="mx-auto max-w-4xl">
         <Reveal>
-          <div className="flex items-center gap-3 text-primary">
-            <span className="h-px w-8 bg-primary/50" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em]">05 / Education</span>
-          </div>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Foundation in computer science.
-          </h2>
+          <SectionHeading
+            eyebrow="Education"
+            title={<>Grounded in <span className="text-gradient font-serif-accent">computer science.</span></>}
+          />
         </Reveal>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">

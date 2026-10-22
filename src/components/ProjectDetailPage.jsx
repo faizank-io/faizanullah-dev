@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft, ArrowUpRight, ExternalLink, AlertTriangle,
   CheckCircle2, ChevronRight, Code2, Layers, Workflow, Zap, Copy, Check,
@@ -10,9 +11,10 @@ import {
 import { FaGithub } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
+import { portfolioData } from "@/data/portfolio";
 
 export default function ProjectDetailPage({ project, projectId }) {
-  const reduce = useReducedMotion();
+  const cover = portfolioData.projects.find((p) => p.id === projectId);
   const [featureIdx, setFeatureIdx] = useState(0);
   const [copied, setCopied] = useState(false);
 
@@ -35,7 +37,7 @@ export default function ProjectDetailPage({ project, projectId }) {
 
         {/* Hero */}
         <Reveal className="mt-8">
-          <span className="neon-border inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />{project.badge}
           </span>
           <h1 className="mt-4 text-3xl font-bold leading-tight tracking-[-0.03em] text-foreground sm:text-4xl md:text-5xl">
@@ -69,14 +71,37 @@ export default function ProjectDetailPage({ project, projectId }) {
             {project.metrics.map((m) => (
               <div key={m.label} className="flex flex-col gap-1 bg-card px-5 py-5">
                 <span className="text-xs font-medium text-muted-foreground">{m.label}</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-mono text-2xl font-bold text-primary">{m.value}</span>
+                <div className="flex flex-wrap items-baseline gap-x-1">
+                  <span className="font-mono text-xl font-bold text-primary sm:text-2xl">{m.value}</span>
                   <span className="text-xs text-muted-foreground">{m.unit}</span>
                 </div>
               </div>
             ))}
           </div>
         </Reveal>
+
+        {cover && (
+          <Reveal delay={0.1} className="mt-8">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-md)]">
+              <div className="flex items-center gap-2 border-b border-border bg-elevated px-4 py-2.5">
+                <div className="flex gap-1.5" aria-hidden="true">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+                </div>
+                <span className="ml-2 truncate font-mono text-[11px] text-muted-foreground">
+                  {project.liveUrl ? project.liveUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "") : "iOS & Android · REST API"}
+                </span>
+                {cover.concept && (
+                  <span className="ml-auto shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">UI concept</span>
+                )}
+              </div>
+              <div className="relative aspect-[16/10]">
+                <Image src={cover.image} alt={`${project.title} — screenshot`} fill preload sizes="(max-width:1024px) 100vw, 960px" className="object-cover object-top" />
+              </div>
+            </div>
+          </Reveal>
+        )}
 
         <Reveal delay={0.12} className="mt-8">
           <p className="text-base leading-relaxed text-muted-foreground">{project.overview}</p>
@@ -87,7 +112,7 @@ export default function ProjectDetailPage({ project, projectId }) {
       <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400"><Layers className="h-5 w-5" /></span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-600 dark:text-cyan-400"><Layers className="h-5 w-5" /></span>
             <h2 className="text-2xl font-bold text-foreground">Architecture & System Design</h2>
           </div>
         </Reveal>
@@ -97,7 +122,7 @@ export default function ProjectDetailPage({ project, projectId }) {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-5">
-          <div className="neon-border rounded-2xl bg-card/50 p-5">
+          <div className="surface rounded-2xl p-5">
             <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-primary">Request Flow</span>
             <div className="flex flex-wrap items-center gap-2">
               {project.architecture.flow.map((step, i) => (
@@ -125,7 +150,7 @@ export default function ProjectDetailPage({ project, projectId }) {
       <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400"><Zap className="h-5 w-5" /></span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 text-amber-600 dark:text-amber-400"><Zap className="h-5 w-5" /></span>
             <h2 className="text-2xl font-bold text-foreground">Engineering Challenges</h2>
           </div>
         </Reveal>
@@ -133,15 +158,15 @@ export default function ProjectDetailPage({ project, projectId }) {
         <div className="mt-5 space-y-5">
           {project.challenges.map((c, i) => (
             <Reveal key={i} delay={i * 0.06}>
-              <div className="neon-border rounded-2xl bg-card p-6">
+              <div className="surface rounded-2xl p-6">
                 <h3 className="mb-4 text-lg font-bold text-foreground">{c.title}</h3>
                 <div className="space-y-3">
                   <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
-                    <div className="mb-1 flex items-center gap-2 text-xs font-bold text-red-400"><AlertTriangle className="h-3.5 w-3.5" />Problem</div>
+                    <div className="mb-1 flex items-center gap-2 text-xs font-bold text-red-600 dark:text-red-400"><AlertTriangle className="h-3.5 w-3.5" />Problem</div>
                     <p className="text-sm leading-relaxed text-muted-foreground">{c.problem}</p>
                   </div>
                   <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
-                    <div className="mb-1 flex items-center gap-2 text-xs font-bold text-emerald-400"><Workflow className="h-3.5 w-3.5" />Solution</div>
+                    <div className="mb-1 flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400"><Workflow className="h-3.5 w-3.5" />Solution</div>
                     <p className="text-sm leading-relaxed text-muted-foreground">{c.solution}</p>
                   </div>
                   <div className="rounded-xl border border-primary/15 bg-primary/5 p-4">
@@ -159,7 +184,7 @@ export default function ProjectDetailPage({ project, projectId }) {
       <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
         <Reveal>
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-400/10 text-violet-400"><Workflow className="h-5 w-5" /></span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-400/10 text-violet-600 dark:text-violet-400"><Workflow className="h-5 w-5" /></span>
             <h2 className="text-2xl font-bold text-foreground">Core Features</h2>
           </div>
         </Reveal>
@@ -183,7 +208,7 @@ export default function ProjectDetailPage({ project, projectId }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={featureIdx}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -201,13 +226,13 @@ export default function ProjectDetailPage({ project, projectId }) {
         <section className="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
           <Reveal>
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-400"><Code2 className="h-5 w-5" /></span>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-600 dark:text-emerald-400"><Code2 className="h-5 w-5" /></span>
               <h2 className="text-2xl font-bold text-foreground">Clean Code</h2>
             </div>
           </Reveal>
 
           <Reveal delay={0.06} className="mt-5">
-            <div className="neon-border overflow-hidden rounded-2xl bg-[#0a0a0a]">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]">
               <div className="flex items-center justify-between border-b border-white/[0.06] bg-[#111111] px-4 py-2.5">
                 <div className="flex items-center gap-3">
                   <div className="flex gap-1.5">
@@ -218,7 +243,7 @@ export default function ProjectDetailPage({ project, projectId }) {
                   <span className="text-xs text-white/30">{project.codeSnippet.title}</span>
                 </div>
                 <button onClick={copyCode} className="flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[11px] text-white/40 transition-colors hover:text-white/70">
-                  {copied ? <><Check className="h-3 w-3 text-emerald-400" />Copied</> : <><Copy className="h-3 w-3" />Copy</>}
+                  {copied ? <><Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />Copied</> : <><Copy className="h-3 w-3" />Copy</>}
                 </button>
               </div>
               <div className="overflow-x-auto p-5">
@@ -237,6 +262,34 @@ export default function ProjectDetailPage({ project, projectId }) {
           </Reveal>
         </section>
       )}
+
+      {/* CTA */}
+      <section className="mx-auto mt-20 max-w-5xl px-5 sm:px-8">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-accent/10 p-8 text-center sm:p-12">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              Want something like this <span className="text-gradient font-serif-accent">for your business?</span>
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              I design and build full stack products end to end. Tell me about your idea and I&apos;ll get back to you with a plan.
+            </p>
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/#contact"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+              >
+                Start a project <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/#projects"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-all hover:border-primary/40"
+              >
+                <ArrowLeft className="h-4 w-4" /> More projects
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
     </main>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   GitBranch, AlertTriangle, CheckCircle2, ChevronRight,
   Radio, Shield, Workflow,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const studies = [
   {
@@ -57,34 +58,29 @@ const studies = [
 ];
 
 const accentMap = {
-  cyan: { text: "text-cyan-400", bg: "bg-cyan-400/10", border: "border-cyan-400/25", dot: "bg-cyan-400" },
-  amber: { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/25", dot: "bg-amber-400" },
-  emerald: { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/25", dot: "bg-emerald-400" },
-  violet: { text: "text-violet-400", bg: "bg-violet-400/10", border: "border-violet-400/25", dot: "bg-violet-400" },
+  cyan: { text: "text-cyan-600 dark:text-cyan-400", bg: "bg-cyan-400/10", border: "border-cyan-400/25", dot: "bg-cyan-400" },
+  amber: { text: "text-amber-600 dark:text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/25", dot: "bg-amber-400" },
+  emerald: { text: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/25", dot: "bg-emerald-400" },
+  violet: { text: "text-violet-600 dark:text-violet-400", bg: "bg-violet-400/10", border: "border-violet-400/25", dot: "bg-violet-400" },
 };
 
 export default function ArchitectureCaseStudies() {
-  const reduce = useReducedMotion();
   const [activeId, setActiveId] = useState(studies[0].id);
   const active = studies.find((s) => s.id === activeId);
   const a = accentMap[active.accent];
 
   return (
     <section id="architecture" className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:py-32">
-      <div className="pointer-events-none absolute right-0 top-1/4 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-[150px]" />
-
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <div className="flex items-center gap-3 text-primary">
-            <span className="h-px w-8 bg-primary/50" />
-            <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em]">Architecture</span>
-          </div>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Engineering challenges <span className="text-gradient font-serif-accent">solved.</span>
-          </h2>
+          <SectionHeading
+            eyebrow="Engineering deep-dives"
+            title={<>Hard problems, <span className="text-gradient font-serif-accent">solved.</span></>}
+            description="A look at real production challenges I've tackled — what went wrong, how I fixed it, and the measurable result."
+          />
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[260px_1fr]">
+        <div className="mt-12 grid gap-6 lg:grid-cols-[280px_1fr]">
           {/* Sidebar */}
           <Reveal delay={0.08}>
             <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible scrollbar-none">
@@ -118,11 +114,11 @@ export default function ArchitectureCaseStudies() {
             {active && (
               <motion.div
                 key={active.id}
-                initial={reduce ? { opacity: 0 } : { opacity: 0, x: 16 }}
+                initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, x: -16 }}
+                exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="neon-border rounded-3xl bg-card p-6 sm:p-8"
+                className="surface rounded-3xl p-6 shadow-[var(--shadow-sm)] sm:p-8"
               >
                 <div className="mb-5 flex items-center gap-3">
                   <span className={cn("flex h-10 w-10 items-center justify-center rounded-xl", a.bg, a.text)}>{active.icon}</span>
@@ -133,14 +129,14 @@ export default function ArchitectureCaseStudies() {
                 </div>
 
                 <div className="mb-5 rounded-2xl border border-red-500/15 bg-red-500/5 p-5">
-                  <div className="mb-1.5 flex items-center gap-2 text-xs font-bold text-red-400">
+                  <div className="mb-1.5 flex items-center gap-2 text-xs font-bold text-red-600 dark:text-red-400">
                     <AlertTriangle className="h-3.5 w-3.5" />Problem
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">{active.problem}</p>
                 </div>
 
                 <div className="mb-5 rounded-2xl border border-emerald-500/15 bg-emerald-500/5 p-5">
-                  <div className="mb-1.5 flex items-center gap-2 text-xs font-bold text-emerald-400">
+                  <div className="mb-1.5 flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     <Workflow className="h-3.5 w-3.5" />Solution
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">{active.solution}</p>

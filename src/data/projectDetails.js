@@ -1,4 +1,6 @@
-export const projectDetails = {
+import { mobileAppDetails } from "./mobileAppDetails";
+
+const baseProjectDetails = {
   printprima: {
     title: "Print Prima — Print Shop Management SaaS",
     subtitle: "Quote-to-Cash, Production Queues & Printer Audit for Large-Format Print Shops",
@@ -1615,7 +1617,7 @@ class SubscriptionBillingService
     subtitle: "UK Student Housing Reservation & Tenancy Workflow Platform",
     liveUrl: "https://nexusstudent.co.uk/",
     githubUrl: null,
-    techStack: ["Laravel", "PHP", "MySQL", "Property Tech", "REST API"],
+    techStack: ["Node.js", "Express", "MySQL", "REST API", "Property Tech"],
     badge: "Live Website",
     metrics: [
       { label: "Properties Listed", value: "150+", unit: "sites" },
@@ -1627,7 +1629,7 @@ class SubscriptionBillingService
       "UK-based student housing and property rental platform enabling room reservations, tenancy workflows, automated tenant inquiries, property listings, and payment handling. Built to guarantee that no two applicants can ever be confirmed into the same room.",
     architecture: {
       description:
-        "Room availability is protected with timed reservation holds at the database level. Tenancy applications flow through a step-based workflow with document verification before deposit and installment payments are scheduled.",
+        "A Node.js and Express REST API backs the website. Room availability is protected with timed reservation holds at the database level using MySQL transactions. Tenancy applications flow through a step-based workflow with document verification before deposit and installment payments are scheduled.",
       flow: [
         "Property Search",
         "Room Availability Check",
@@ -1677,33 +1679,33 @@ class SubscriptionBillingService
       { title: "Payment Installment Scheduling", description: "Automated scheduling of deposit and rent installment payments." },
     ],
     codeSnippet: {
-      title: "RoomReservationService — Timed Hold on Availability",
-      language: "php",
-      code: `<?php
+      title: "reservationService.js — Timed Hold on Availability",
+      language: "javascript",
+      code: `// Places a 24-hour hold on a room inside a MySQL transaction
+export async function holdRoom(pool, roomId, applicantId) {
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
 
-namespace App\\Services;
+    const [rows] = await conn.query(
+      "SELECT id FROM rooms WHERE id = ? AND status = 'available' FOR UPDATE",
+      [roomId]
+    );
+    if (rows.length === 0) throw new Error("ROOM_UNAVAILABLE");
 
-use App\\Models\\Room;
-use Illuminate\\Support\\Facades\\DB;
+    await conn.query("UPDATE rooms SET status = 'held' WHERE id = ?", [roomId]);
+    await conn.query(
+      "INSERT INTO reservations (room_id, applicant_id, expires_at) VALUES (?, ?, NOW() + INTERVAL 24 HOUR)",
+      [roomId, applicantId]
+    );
 
-class RoomReservationService
-{
-    public function hold(Room \$room, int \$applicantId): void
-    {
-        DB::transaction(function () use (\$room, \$applicantId) {
-            \$locked = Room::where('id', \$room->id)
-                ->where('status', 'available')
-                ->lockForUpdate()
-                ->firstOrFail();
-
-            \$locked->update(['status' => 'held']);
-
-            \$locked->reservations()->create([
-                'applicant_id' => \$applicantId,
-                'expires_at' => now()->addHours(24),
-            ]);
-        });
-    }
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  } finally {
+    conn.release();
+  }
 }`,
     },
   },
@@ -2025,6 +2027,8 @@ class FCMNotificationService
     },
   },
 };
+
+export const projectDetails = { ...baseProjectDetails, ...mobileAppDetails };
 
 export function getProjectDetail(id) {
   return projectDetails[id] || null;

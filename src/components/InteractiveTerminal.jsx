@@ -83,7 +83,8 @@ const commands = {
     lines: [
       "Stack:",
       "",
-      "  Backend:    Laravel 11, Node.js, Flask",
+      "  Frontend:   React.js, Next.js, Tailwind CSS",
+      "  Backend:    Laravel 11, Node.js, Express, Flask",
       "  Database:   MySQL 8, PostgreSQL, Redis",
       "  Real-time:  Pusher, Laravel Echo",
       "  Auth:       Sanctum, JWT, OAuth2",
@@ -96,8 +97,8 @@ const commands = {
     lines: [
       "",
       "  Faizan Ullah",
-      "  Senior Backend Engineer & API Architect",
-      "  Laravel · PHP 8.1+ · WebSockets · MySQL",
+      "  Full Stack Engineer",
+      "  React.js · Node.js · PHP · Laravel · MySQL",
       "  3.5+ years · 28 projects · Karachi, PK",
       "",
       "  // Systems that never break.",

@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import ScrollProgress from "@/components/ScrollProgress";
-import CursorGlow from "@/components/CursorGlow";
+import FloatingContact from "@/components/FloatingContact";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,49 +19,67 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://faizanullah-dev.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://faizanullahdevs.com";
+
+const siteTitle = "Faizan Ullah — Full Stack Engineer | React.js, Node.js, PHP & Laravel";
+const siteDescription =
+  "Faizan Ullah is a Full Stack Engineer from Karachi, Pakistan, building fast, scalable web apps with React.js, Next.js, Node.js, PHP, and Laravel — from pixel-perfect frontends to secure REST APIs, SaaS platforms, and optimized databases.";
+
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f8fb" },
+    { media: "(prefers-color-scheme: dark)", color: "#06080f" },
+  ],
+};
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Faizan Ullah — Senior Backend Engineer & API Architect",
-    template: "%s | Faizan Ullah",
+    default: siteTitle,
+    template: "%s | Faizan Ullah — Full Stack Engineer",
   },
-  description:
-    "Faizan Ullah is a Senior Backend Engineer & API Architect specializing in PHP, Laravel, Node.js, Python Flask, microservices, high-throughput RESTful APIs, and database optimization.",
+  description: siteDescription,
   applicationName: "Faizan Ullah Portfolio",
-  authors: [{ name: "Faizan Ullah", url: "https://faizanullahtech.com" }],
+  authors: [{ name: "Faizan Ullah", url: siteUrl }],
   generator: "Next.js",
   keywords: [
     "Faizan Ullah",
     "Faizan Ullah Developer",
-    "Faizan Ullah Backend Engineer",
+    "Faizan Ullah Full Stack Engineer",
+    "Faizan Ullah Full Stack Developer",
     "Faizan Ullah Laravel",
+    "Faizan Ullah React",
     "Faizan Ullah Pakistan",
-    "faizanullahtech.com",
-    "Senior Backend Engineer",
-    "Backend Developer",
-    "API Architect",
+    "faizanullahdevs",
+    "faizanullahdevs.com",
+    "Full Stack Engineer",
+    "Full Stack Developer",
+    "MERN Stack Developer",
+    "React.js Developer",
+    "Next.js Developer",
+    "Node.js Developer",
+    "Express.js Developer",
     "Laravel Developer",
     "PHP Developer",
-    "Node.js Developer",
-    "Python Flask Developer",
-    "SaaS Backend Engineer",
-    "REST API Architect",
-    "High Throughput APIs",
-    "Database Optimization Expert",
-    "MySQL Optimization",
-    "PostgreSQL Engineer",
-    "Microservices Architect",
-    "Backend Engineer Karachi",
+    "Laravel React Developer",
+    "REST API Developer",
+    "SaaS Developer",
+    "Web Application Developer",
+    "Database Optimization",
+    "MySQL",
+    "PostgreSQL",
+    "Full Stack Developer Karachi",
+    "Full Stack Developer Pakistan",
+    "Hire Full Stack Developer Pakistan",
     "Hire Laravel Developer Pakistan",
-    "Remote Senior Backend Engineer",
-    "Full Stack API Developer",
+    "Hire React Developer Pakistan",
+    "Remote Full Stack Engineer",
+    "Freelance Full Stack Developer",
     "CRMLogy",
     "Leja Book",
     "Digistore Direct",
     "IDAA Assessment",
-    "Devop360 Backend Developer",
+    "Devop360 Developer",
   ],
   creator: "Faizan Ullah",
   publisher: "Faizan Ullah",
@@ -70,9 +88,8 @@ export const metadata = {
     canonical: siteUrl,
   },
   openGraph: {
-    title: "Faizan Ullah — Senior Backend Engineer & API Architect",
-    description:
-      "Portfolio of Faizan Ullah, Senior Backend Engineer specializing in Laravel, PHP, Node.js, Python Flask, high-throughput REST APIs, and database optimization.",
+    title: siteTitle,
+    description: siteDescription,
     url: siteUrl,
     siteName: "Faizan Ullah Portfolio",
     images: [
@@ -80,17 +97,19 @@ export const metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Faizan Ullah — Senior Backend Engineer & API Architect",
+        alt: "Faizan Ullah — Full Stack Engineer",
       },
     ],
     locale: "en_US",
-    type: "website",
+    type: "profile",
+    firstName: "Faizan",
+    lastName: "Ullah",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Faizan Ullah — Senior Backend Engineer & API Architect",
+    title: siteTitle,
     description:
-      "Senior Backend Engineer specializing in PHP, Laravel, Node.js, Python Flask, database optimization, and high-throughput RESTful APIs.",
+      "Full Stack Engineer building scalable web apps with React.js, Next.js, Node.js, PHP, and Laravel.",
     creator: "@faizanullahdev",
     images: ["/opengraph-image"],
   },
@@ -117,23 +136,35 @@ const jsonLd = {
       "@type": "Person",
       "@id": `${siteUrl}/#person`,
       name: "Faizan Ullah",
-      alternateName: ["Faizan Ullah Dev", "Faizan Laravel Developer"],
-      jobTitle: "Senior Backend Engineer & API Architect",
+      alternateName: ["Faizan Ullah Dev", "faizanullahdevs", "Faizan Full Stack Developer"],
+      jobTitle: "Full Stack Engineer",
+      image: `${siteUrl}/faizan-ullah-photo.png`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Karachi",
+        addressCountry: "PK",
+      },
       worksFor: {
         "@type": "Organization",
         name: "Devop360 Technology",
       },
       url: siteUrl,
       sameAs: [
-        "https://pk.linkedin.com/in/faizan-laravel-developer",
+        "https://www.linkedin.com/in/faizan-fullstack-engineer",
         "https://github.com/faizanullah-dev",
       ],
       email: "faizanullah.dev5@gmail.com",
       telephone: "+923130056857",
       knowsAbout: [
+        "Full Stack Development",
+        "React.js",
+        "Next.js",
+        "JavaScript",
+        "Tailwind CSS",
+        "Node.js",
+        "Express.js",
         "PHP",
         "Laravel",
-        "Node.js",
         "Python Flask",
         "RESTful APIs",
         "Database Optimization",
@@ -144,8 +175,7 @@ const jsonLd = {
         "Microservices",
         "System Design",
       ],
-      description:
-        "Dedicated Backend Engineer with expertise in PHP, Laravel, Node.js, and Python Flask. Passionate about building scalable systems, high-throughput RESTful APIs, optimizing databases, and integrating AI.",
+      description: siteDescription,
     },
     {
       "@type": "WebSite",
@@ -153,7 +183,7 @@ const jsonLd = {
       url: siteUrl,
       name: "Faizan Ullah Portfolio",
       description:
-        "Official Portfolio of Faizan Ullah, Senior Backend Engineer & API Architect",
+        "Official portfolio of Faizan Ullah, Full Stack Engineer (React.js, Node.js, PHP & Laravel)",
       publisher: {
         "@id": `${siteUrl}/#person`,
       },
@@ -162,7 +192,7 @@ const jsonLd = {
       "@type": "ProfilePage",
       "@id": `${siteUrl}/#profilepage`,
       url: siteUrl,
-      name: "Faizan Ullah — Senior Backend Engineer & API Architect",
+      name: siteTitle,
       mainEntity: {
         "@id": `${siteUrl}/#person`,
       },
@@ -186,13 +216,13 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
-          disableTransitionOnChange={false}
+          disableTransitionOnChange
         >
           <ScrollProgress />
           <Header />
-          <CursorGlow />
+          <FloatingContact />
           {children}
         </ThemeProvider>
       </body>

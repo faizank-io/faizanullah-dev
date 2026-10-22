@@ -11,9 +11,20 @@ export async function generateMetadata({ params }) {
   const project = getProjectDetail(id);
   if (!project) return {};
 
+  const description = project.overview.slice(0, 160);
+
   return {
     title: project.title,
-    description: project.overview.slice(0, 160),
+    description,
+    alternates: {
+      canonical: `/projects/${id}`,
+    },
+    openGraph: {
+      title: `${project.title} | Faizan Ullah`,
+      description,
+      url: `/projects/${id}`,
+      type: "article",
+    },
   };
 }
 

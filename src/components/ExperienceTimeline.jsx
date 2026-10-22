@@ -1,23 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { portfolioData } from "@/data/portfolio";
 import { Calendar, ChevronDown, CheckCircle2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getYearsOfExperience, getDetailedExperience } from "@/lib/utils";
+import { cn, getYearsOfExperience, getDetailedExperience } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const roleDetails = {
   "Devop360 Technology": {
-    badge: "Senior",
+    badge: "Full Stack",
     type: "Full-Time",
     highlights: [
+      "Build responsive React.js and Next.js frontends connected to Laravel and Node.js APIs.",
       "Designed RESTful backend APIs supporting 9 mobile applications (iOS & Android).",
       "Integrated Stripe Connect, M-Pesa, QuickBooks API and CRM systems.",
       "Optimized database indexing and caching for high-concurrency API performance.",
     ],
-    tech: ["Laravel", "PHP", "Node.js", "MySQL", "REST APIs", "Sanctum"],
+    tech: ["React.js", "Next.js", "Node.js", "Laravel", "PHP", "MySQL", "REST APIs"],
   },
   "Tafsol Technologies": {
     badge: "Mid-Senior",
@@ -53,29 +54,23 @@ const roleDetails = {
 
 export default function ExperienceTimeline() {
   const { experience } = portfolioData;
-  const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(0);
 
   return (
     <section id="experience" className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:py-32">
-      <div className="pointer-events-none absolute left-0 top-1/3 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-[150px]" />
-
       <div className="mx-auto max-w-4xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal>
-            <div className="flex items-center gap-3 text-primary">
-              <span className="h-px w-8 bg-primary/50" />
-              <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em]">04 / Experience</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Career built on shipped work.
-            </h2>
+            <SectionHeading
+              eyebrow="Experience"
+              title={<>A career built on <span className="text-gradient font-serif-accent">shipped work.</span></>}
+            />
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div className="rounded-2xl border border-border bg-card px-4 py-3">
-              <div className="text-sm font-bold text-foreground">{getYearsOfExperience()} career experience</div>
-              <div className="text-xs text-muted-foreground">{getDetailedExperience()} · Jan 2023 – present</div>
+            <div className="surface rounded-2xl px-5 py-4">
+              <div className="text-2xl font-bold tracking-tight text-foreground">{getYearsOfExperience()} years</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">{getDetailedExperience()} · since Jan 2023</div>
             </div>
           </Reveal>
         </div>
@@ -105,7 +100,7 @@ export default function ExperienceTimeline() {
                       aria-expanded={on}
                       className={cn(
                         "group w-full rounded-2xl border bg-card p-5 text-left transition-all duration-300 sm:p-6",
-                        on ? "neon-border border-primary/40 shadow-[var(--shadow-md)]" : "border border-border hover:border-primary/30 hover:shadow-[var(--shadow-sm)]"
+                        on ? "border-primary/40 shadow-[var(--shadow-md)]" : "border-border hover:border-primary/30 hover:shadow-[var(--shadow-sm)]"
                       )}
                     >
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -131,9 +126,9 @@ export default function ExperienceTimeline() {
                       <AnimatePresence initial={false}>
                         {on && (
                           <motion.div
-                            initial={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+                            initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
-                            exit={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+                            exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                             className="overflow-hidden"
                           >

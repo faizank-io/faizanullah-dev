@@ -1,174 +1,211 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Download, ChevronDown, Activity, Cpu, Database, Wifi } from "lucide-react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Download, MapPin } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
+import {
+  SiReact, SiNextdotjs, SiJavascript, SiTailwindcss, SiNodedotjs, SiExpress,
+  SiPhp, SiLaravel, SiMysql, SiPostgresql, SiRedis, SiDocker, SiStripe, SiPython,
+} from "react-icons/si";
 import { portfolioData } from "@/data/portfolio";
 import { getYearsOfExperience } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1];
 
-function Counter({ end, suffix = "", duration = 2200 }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef(null);
-  const ran = useRef(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting && !ran.current) {
-          ran.current = true;
-          const t0 = performance.now();
-          const tick = (now) => {
-            const p = Math.min((now - t0) / duration, 1);
-            setVal(Math.round((1 - Math.pow(1 - p, 3)) * end));
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        }
-      },
-      { threshold: 0.4 }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [end, duration]);
-
-  return <span ref={ref}>{val}{suffix}</span>;
-}
-
-const dashboardCards = [
-  { icon: <Activity className="h-4 w-4" />, label: "Uptime", value: 99.9, suffix: "%", color: "text-emerald-400" },
-  { icon: <Cpu className="h-4 w-4" />, label: "Projects", value: 28, suffix: "+", color: "text-violet-400" },
-  { icon: <Database className="h-4 w-4" />, label: "API Response", value: 45, suffix: "ms", color: "text-cyan-400" },
-  { icon: <Wifi className="h-4 w-4" />, label: "Tenants", value: 5, suffix: "+", color: "text-amber-400" },
+const marquee = [
+  { name: "React.js", icon: <SiReact className="text-[#61DAFB]" /> },
+  { name: "Next.js", icon: <SiNextdotjs /> },
+  { name: "JavaScript", icon: <SiJavascript className="text-[#F7DF1E]" /> },
+  { name: "Tailwind CSS", icon: <SiTailwindcss className="text-[#06B6D4]" /> },
+  { name: "Node.js", icon: <SiNodedotjs className="text-[#5FA04E]" /> },
+  { name: "Express", icon: <SiExpress /> },
+  { name: "PHP", icon: <SiPhp className="text-[#777BB4]" /> },
+  { name: "Laravel", icon: <SiLaravel className="text-[#FF2D20]" /> },
+  { name: "MySQL", icon: <SiMysql className="text-[#4479A1]" /> },
+  { name: "PostgreSQL", icon: <SiPostgresql className="text-[#4169E1]" /> },
+  { name: "Redis", icon: <SiRedis className="text-[#DC382D]" /> },
+  { name: "Docker", icon: <SiDocker className="text-[#2496ED]" /> },
+  { name: "Stripe", icon: <SiStripe className="text-[#635BFF]" /> },
+  { name: "Python Flask", icon: <SiPython className="text-[#3776AB]" /> },
 ];
 
 export default function HeroSection() {
-  const { profile } = portfolioData;
-  const reduce = useReducedMotion();
+  const { profile, stats, projects } = portfolioData;
   const years = getYearsOfExperience();
 
   const f = (delay) => ({
-    initial: reduce ? { opacity: 0 } : { opacity: 0, y: 28 },
+    initial: { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.75, delay, ease },
+    transition: { duration: 0.8, delay, ease },
   });
 
+  const heroStats = [
+    { value: years, label: "Years of experience" },
+    { value: `${projects.length}+`, label: "Projects delivered" },
+    ...stats,
+  ];
+
   return (
-    <section
-      id="home"
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pt-28 pb-16 sm:px-8"
-    >
+    <section id="home" className="relative overflow-hidden pt-28 sm:pt-36">
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <div className="dot-grid absolute inset-0 opacity-40 dark:opacity-20" />
-        <div className="absolute left-1/2 top-1/3 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-primary/6 blur-[200px]" />
-        <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-accent/5 blur-[160px]" />
+        <div className="grid-bg absolute inset-0 opacity-70" />
+        <div className="absolute -top-40 left-1/2 h-[620px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
+        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-accent/10 blur-[150px]" />
       </div>
 
-      <div className="mx-auto w-full max-w-6xl">
-        {/* Status */}
-        <motion.div {...f(0.05)}>
-          <span className="neon-border inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-sm text-muted-foreground backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+        {/* Copy */}
+        <div className="order-2 lg:order-1">
+          <motion.div {...f(0.05)}>
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              Available for new projects &amp; full-time roles
             </span>
-            Available for hire
-          </span>
-        </motion.div>
+          </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          {...f(0.15)}
-          className="mt-8 max-w-3xl text-[clamp(2.4rem,6vw,5rem)] font-bold leading-[1.02] tracking-[-0.04em] text-foreground"
-        >
-          Backend systems that{" "}
-          <span className="text-gradient font-serif-accent">scale.</span>
-        </motion.h1>
+          <motion.p {...f(0.1)} className="mt-6 text-base font-medium text-muted-foreground sm:text-lg">
+            Hi, I&apos;m <span className="font-semibold text-foreground">{profile.name}</span> — {profile.role}
+          </motion.p>
 
-        <motion.p
-          {...f(0.25)}
-          className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground"
-        >
-          {years}+ years engineering multi-tenant SaaS, real-time WebSocket
-          dashboards, and production APIs — with Laravel, PHP&nbsp;8.1+, and MySQL.
-        </motion.p>
+          <motion.h1
+            {...f(0.15)}
+            className="mt-3 text-[clamp(2.3rem,5.4vw,4.4rem)] font-bold leading-[1.04] tracking-[-0.035em] text-foreground"
+          >
+            I build fast, scalable web apps that{" "}
+            <span className="text-gradient font-serif-accent pr-1">grow businesses.</span>
+          </motion.h1>
 
-        {/* CTAs */}
-        <motion.div {...f(0.35)} className="mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href="#projects"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-sm)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
-          >
-            View projects
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
-          <a
-            href="/resume.pdf"
-            download="Faizan-Ullah-Resume.pdf"
-            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40"
-          >
-            <Download className="h-4 w-4" />
-            Resume
-          </a>
-          <a
-            href={profile.contact.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
-          >
-            <FaGithub className="h-4.5 w-4.5" />
-          </a>
-          <a
-            href={profile.contact.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
-          >
-            <FaLinkedin className="h-4.5 w-4.5" />
-          </a>
-        </motion.div>
+          <motion.p {...f(0.25)} className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            From pixel-perfect <strong className="font-semibold text-foreground">React.js &amp; Next.js</strong> frontends
+            to secure <strong className="font-semibold text-foreground">Node.js &amp; Laravel</strong> APIs —
+            I take products from idea to production, and keep them running smoothly.
+          </motion.p>
 
-        {/* Dashboard bento */}
-        <motion.div
-          {...f(0.5)}
-          className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-4"
-        >
-          {dashboardCards.map((card, i) => (
-            <div
-              key={card.label}
-              className="neon-border group rounded-2xl bg-card/80 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+          <motion.div {...f(0.35)} className="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href="#contact"
+              className="group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_var(--primary)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_-10px_var(--primary)]"
             >
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span className={card.color}>{card.icon}</span>
-                <span className="text-xs font-medium">{card.label}</span>
+              Start a project
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </a>
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground shadow-[var(--shadow-xs)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40"
+            >
+              View my work
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+            <a
+              href="/resume.pdf"
+              download="Faizan-Ullah-Resume.pdf"
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-3.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Download className="h-4 w-4" />
+              Resume
+            </a>
+          </motion.div>
+
+          <motion.dl {...f(0.45)} className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-border pt-8 sm:grid-cols-4">
+            {heroStats.map((s) => (
+              <div key={s.label}>
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="text-3xl font-bold tracking-tight text-foreground">{s.value}</dd>
+                <dd className="mt-1 text-xs font-medium leading-snug text-muted-foreground">{s.label}</dd>
               </div>
-              <div className={`mt-2 font-mono text-2xl font-bold tracking-tight ${card.color}`}>
-                <Counter end={card.value} suffix={card.suffix} />
+            ))}
+          </motion.dl>
+        </div>
+
+        {/* Portrait */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.15, ease }}
+          className="order-1 mx-auto w-full max-w-[240px] sm:max-w-[340px] lg:order-2 lg:max-w-[390px]"
+        >
+          {/* The cut-out portrait "rises" out of a gradient circle: the circle sits in the
+              bottom square of a 1:1.2 box, and the photo is clipped only along the circle's lower half. */}
+          <div className="relative aspect-[1/1.2]">
+            <div className="absolute inset-x-[-6%] bottom-[-4%] aspect-square rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+            <div className="absolute inset-x-[-5%] bottom-[-5%] aspect-square rounded-full border border-border" aria-hidden="true" />
+            <div className="absolute inset-x-0 bottom-0 aspect-square rounded-full border border-border bg-gradient-to-b from-elevated to-muted shadow-[var(--shadow-md)]" aria-hidden="true" />
+            <div className="absolute inset-0 overflow-hidden [border-radius:0_0_50%_50%/0_0_41.667%_41.667%]">
+              <div className="absolute bottom-0 left-1/2 aspect-square w-[112%] -translate-x-[57%]">
+                <Image
+                  src={profile.photo}
+                  alt={`${profile.name} — ${profile.role}`}
+                  fill
+                  preload
+                  sizes="(max-width: 640px) 270px, (max-width: 1024px) 380px, 440px"
+                  className="object-contain object-bottom drop-shadow-[0_20px_30px_rgba(0,0,0,0.25)]"
+                />
               </div>
             </div>
-          ))}
+
+            {/* Floating: location */}
+            <div className="animate-float glass absolute -left-8 top-[30%] z-10 hidden items-center gap-2 rounded-2xl border border-border px-3.5 py-2.5 shadow-[var(--shadow-md)] sm:flex">
+              <MapPin className="h-4 w-4 text-primary" />
+              <div className="leading-tight">
+                <div className="text-xs font-semibold text-foreground">Karachi, PK</div>
+                <div className="text-[11px] text-muted-foreground">Remote worldwide</div>
+              </div>
+            </div>
+
+            {/* Floating: stack */}
+            <div className="animate-float-delayed glass absolute -bottom-4 -right-8 z-10 hidden items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-[var(--shadow-md)] sm:flex">
+              <div className="flex -space-x-1.5 text-lg">
+                {[<SiReact key="r" className="text-[#61DAFB]" />, <SiNodedotjs key="n" className="text-[#5FA04E]" />, <SiLaravel key="l" className="text-[#FF2D20]" />].map((icon, i) => (
+                  <span key={i} className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card">{icon}</span>
+                ))}
+              </div>
+              <div className="leading-tight">
+                <div className="text-xs font-semibold text-foreground">Full Stack</div>
+                <div className="text-[11px] text-muted-foreground">Frontend → API → DB</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10 hidden items-center justify-center gap-2 sm:flex">
+            {[
+              { label: "GitHub", href: profile.contact.github, icon: <FaGithub className="h-4 w-4" /> },
+              { label: "LinkedIn", href: profile.contact.linkedin, icon: <FaLinkedin className="h-4 w-4" /> },
+            ].map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-foreground"
+              >
+                {s.icon}{s.label}
+              </a>
+            ))}
+          </div>
         </motion.div>
       </div>
 
-      {/* Scroll */}
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 text-muted-foreground md:flex"
-        aria-label="Scroll down"
-      >
-        <span className="text-[10px] font-medium uppercase tracking-[0.3em]">Scroll</span>
-        <motion.span animate={reduce ? {} : { y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
-          <ChevronDown className="h-4 w-4" />
-        </motion.span>
-      </motion.a>
+      {/* Tech marquee */}
+      <motion.div {...f(0.6)} className="marquee mask-fade-x mt-20 overflow-hidden border-y border-border bg-card/40 py-5">
+        <div className="animate-marquee flex w-max items-center">
+          {[...marquee, ...marquee].map((t, i) => (
+            <span
+              key={`${t.name}-${i}`}
+              aria-hidden={i >= marquee.length}
+              className="mx-6 inline-flex items-center gap-2.5 text-sm font-semibold text-muted-foreground"
+            >
+              <span className="text-xl">{t.icon}</span>
+              {t.name}
+            </span>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }

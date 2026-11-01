@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProjectDetail, getAllProjectIds } from "@/data/projectDetails";
 import ProjectDetailPage from "@/components/ProjectDetailPage";
+import { portfolioData } from "@/data/portfolio";
 
 export async function generateStaticParams() {
   return getAllProjectIds().map((id) => ({ id }));
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }) {
   return {
     title: project.title,
     description,
+    ...(portfolioData.collapsedProjects.includes(id) && { robots: { index: false, follow: false } }),
     alternates: {
       canonical: `/projects/${id}`,
     },

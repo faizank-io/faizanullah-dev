@@ -9,7 +9,7 @@ async function fixCrmlogy() {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, ignoreHTTPSErrors: true });
 
   console.log("Fixing CRMLogy screenshot...");
-  await page.goto("https://crmlogy.devop360.com/", { waitUntil: "domcontentloaded" });
+  await page.goto("https://crmlogy.com/", { waitUntil: "domcontentloaded" });
   await page.waitForTimeout(4000);
 
   // Click close button if available

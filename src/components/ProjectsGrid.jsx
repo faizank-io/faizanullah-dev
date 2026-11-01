@@ -31,7 +31,7 @@ function hostname(url) {
 }
 
 export default function ProjectsGrid() {
-  const { projects, projectOrder, projectCategories } = portfolioData;
+  const { projects, projectOrder, projectCategories, collapsedProjects } = portfolioData;
   const [cat, setCat] = useState("All");
   const [showAll, setShowAll] = useState(false);
 
@@ -41,7 +41,8 @@ export default function ProjectsGrid() {
     ...projects.filter((p) => !projectOrder.includes(p.id)),
   ];
   const filtered = ordered.filter((p) => cat === "All" || p.category === cat);
-  const visible = showAll ? filtered : filtered.slice(0, INITIAL_COUNT);
+  const initial = filtered.filter((p) => !collapsedProjects.includes(p.id)).slice(0, INITIAL_COUNT);
+  const visible = showAll ? filtered : initial;
 
   const selectCategory = (c) => {
     setCat(c);
@@ -101,7 +102,7 @@ export default function ProjectsGrid() {
           </AnimatePresence>
         </motion.div>
 
-        {filtered.length > INITIAL_COUNT && (
+        {filtered.length > initial.length && (
           <div className="mt-10 flex justify-center">
             <button
               onClick={() => setShowAll((v) => !v)}

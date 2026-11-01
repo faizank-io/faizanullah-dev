@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { portfolioData } from "@/data/portfolio";
-import { Calendar, ChevronDown, CheckCircle2 } from "lucide-react";
+import { Calendar, CheckCircle2 } from "lucide-react";
 import { cn, getYearsOfExperience, getDetailedExperience } from "@/lib/utils";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -54,11 +54,14 @@ const roleDetails = {
 
 export default function ExperienceTimeline() {
   const { experience } = portfolioData;
-  const [expanded, setExpanded] = useState(0);
+  const [active, setActive] = useState(0);
+  const exp = experience[active];
+  const det = roleDetails[exp.company] || { badge: "Engineer", type: "Full-Time", highlights: [exp.description], tech: [] };
+  const companyName = (c) => c.split(" (")[0];
 
   return (
     <section id="experience" className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:py-32">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal>
             <SectionHeading
@@ -68,93 +71,98 @@ export default function ExperienceTimeline() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div className="surface rounded-2xl px-5 py-4">
-              <div className="text-2xl font-bold tracking-tight text-foreground">{getYearsOfExperience()} years</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{getDetailedExperience()} · since Jan 2023</div>
+            <div className="flex items-baseline gap-3">
+              <span className="text-gradient text-5xl font-bold tracking-tight">{getYearsOfExperience()}</span>
+              <span className="text-sm leading-tight text-muted-foreground">years in production<br />{getDetailedExperience()} since Jan 2023</span>
             </div>
           </Reveal>
         </div>
 
-        <div className="relative mt-12">
-          {/* Timeline line */}
-          <div className="absolute bottom-4 left-[15px] top-2 w-px bg-gradient-to-b from-primary via-primary/30 to-border" aria-hidden="true" />
-
-          <div className="flex flex-col gap-5">
-            {experience.map((exp, idx) => {
-              const det = roleDetails[exp.company] || { badge: "Engineer", type: "Full-Time", highlights: [exp.description], tech: ["PHP", "Laravel"] };
-              const on = expanded === idx;
-
-              return (
-                <Reveal key={`${exp.company}-${idx}`} delay={idx * 0.05}>
-                  <div className="relative pl-12">
-                    {/* Node */}
-                    <div className={cn(
-                      "absolute left-0 top-6 flex h-[30px] w-[30px] items-center justify-center rounded-full border text-[11px] font-bold transition-all duration-300",
-                      on ? "border-primary bg-primary text-primary-foreground ring-4 ring-primary/15" : "border-border bg-card text-muted-foreground"
-                    )}>
-                      {String(idx + 1).padStart(2, "0")}
-                    </div>
-
-                    <button
-                      onClick={() => setExpanded(on ? null : idx)}
-                      aria-expanded={on}
-                      className={cn(
-                        "group w-full rounded-2xl border bg-card p-5 text-left transition-all duration-300 sm:p-6",
-                        on ? "border-primary/40 shadow-[var(--shadow-md)]" : "border-border hover:border-primary/30 hover:shadow-[var(--shadow-sm)]"
-                      )}
-                    >
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                          <div className="mb-2 flex flex-wrap gap-2">
-                            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">{det.badge}</span>
-                            <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">{det.type}</span>
-                          </div>
-                          <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">{exp.role}</h3>
-                          <p className="mt-0.5 text-sm font-semibold text-primary">{exp.company}</p>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-                            <Calendar className="h-3.5 w-3.5" />{exp.period}
+        <Reveal delay={0.1} className="mt-12">
+          <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
+            {/* Company rail */}
+            <div role="tablist" aria-label="Companies" className="relative flex gap-2 overflow-x-auto pb-1 scrollbar-none lg:flex-col lg:overflow-visible lg:pb-0">
+              {experience.map((e, i) => {
+                const on = active === i;
+                return (
+                  <button
+                    key={`${e.company}-${i}`}
+                    role="tab"
+                    aria-selected={on}
+                    onClick={() => setActive(i)}
+                    className={cn(
+                      "relative w-[250px] shrink-0 rounded-2xl p-5 text-left transition-colors duration-300 lg:w-full",
+                      on ? "text-white" : "border border-border bg-card hover:border-primary/30"
+                    )}
+                  >
+                    {on && (
+                      <motion.span
+                        layoutId="experience-active"
+                        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-md)]"
+                        transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                      />
+                    )}
+                    <span className="relative block">
+                      <span className="flex items-center justify-between gap-3">
+                        <span className={cn("truncate text-sm font-bold", !on && "text-foreground")}>{companyName(e.company)}</span>
+                        {i === 0 && (
+                          <span className={cn("relative flex h-2 w-2 shrink-0", on ? "text-white" : "text-emerald-500")} title="Current role">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-60" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-current" />
                           </span>
-                          <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform duration-300", on && "rotate-180 text-primary")} />
-                        </div>
-                      </div>
-
-                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{exp.description}</p>
-
-                      <AnimatePresence initial={false}>
-                        {on && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="mt-4 space-y-4 border-t border-border/50 pt-4">
-                              <span className="text-[11px] font-bold uppercase tracking-widest text-foreground">Key achievements</span>
-                              <ul className="space-y-2">
-                                {det.highlights.map((h, i) => (
-                                  <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />{h}
-                                  </li>
-                                ))}
-                              </ul>
-                              <div className="flex flex-wrap gap-1.5">
-                                {det.tech.map((t) => <span key={t} className="rounded-lg border border-border bg-muted px-2.5 py-1 text-xs font-medium text-foreground">{t}</span>)}
-                              </div>
-                            </div>
-                          </motion.div>
                         )}
-                      </AnimatePresence>
-                    </button>
+                      </span>
+                      <span className={cn("mt-1 block truncate text-xs", on ? "text-white/85" : "text-muted-foreground")}>{e.role}</span>
+                      <span className={cn("mt-2 block text-[11px] font-medium", on ? "text-white/75" : "text-muted-foreground/80")}>{e.period}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Role detail */}
+            <div className="surface relative min-h-[420px] overflow-hidden rounded-3xl p-6 shadow-[var(--shadow-sm)] sm:p-9">
+              <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={active}
+                  role="tabpanel"
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{det.badge}</span>
+                    <span className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">{det.type}</span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
+                      <Calendar className="h-3 w-3" />{exp.period}
+                    </span>
                   </div>
-                </Reveal>
-              );
-            })}
+
+                  <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{exp.role}</h3>
+                  <p className="mt-1 text-base font-semibold text-primary">{exp.company}</p>
+                  <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">{exp.description}</p>
+
+                  <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+                    {det.highlights.map((h) => (
+                      <li key={h} className="flex items-start gap-3 rounded-2xl bg-muted/60 p-4 text-sm leading-relaxed text-foreground/85">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />{h}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex flex-wrap gap-1.5">
+                    {det.tech.map((t) => (
+                      <span key={t} className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground">{t}</span>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

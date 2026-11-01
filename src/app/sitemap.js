@@ -1,4 +1,5 @@
 import { getAllProjectIds } from "@/data/projectDetails";
+import { portfolioData } from "@/data/portfolio";
 
 export default function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://faizanullahdevs.com";
@@ -10,7 +11,7 @@ export default function sitemap() {
       changeFrequency: "weekly",
       priority: 1.0,
     },
-    ...getAllProjectIds().map((id) => ({
+    ...getAllProjectIds().filter((id) => !portfolioData.collapsedProjects.includes(id)).map((id) => ({
       url: `${baseUrl}/projects/${id}`,
       lastModified: new Date(),
       changeFrequency: "monthly",

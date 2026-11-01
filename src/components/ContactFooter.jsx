@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Phone, ArrowUpRight, ArrowUp, Send, Clock, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Phone, ArrowUpRight, ArrowUp, Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { FaWhatsapp, FaLinkedin, FaGithub, FaUpwork } from "react-icons/fa6";
 import { portfolioData } from "@/data/portfolio";
 import Reveal from "@/components/ui/Reveal";
-import SectionHeading from "@/components/ui/SectionHeading";
 
 const projectTypes = [
   "Full stack web app",
@@ -35,29 +34,29 @@ export default function ContactFooter() {
       label: "WhatsApp",
       value: "Chat with me directly",
       href: `${contact.whatsapp}?text=${encodeURIComponent("Hi Faizan, I found your portfolio and would like to discuss a project.")}`,
-      tint: "text-[#25D366] bg-[#25D366]/10 border-[#25D366]/20",
+      tint: "text-[#25D366] bg-[#25D366]/15",
       external: true,
     },
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: contact.email,
+      value: "Write to me",
       href: `mailto:${contact.email}`,
-      tint: "text-primary bg-primary/10 border-primary/20",
+      tint: "text-[#7aa2ff] bg-[#7aa2ff]/15",
     },
     {
       icon: <Phone className="h-5 w-5" />,
       label: "Call",
       value: contact.phoneDisplay,
       href: `tel:${contact.phone}`,
-      tint: "text-accent bg-accent/10 border-accent/20",
+      tint: "text-[#2dd4bf] bg-[#2dd4bf]/15",
     },
     {
       icon: <FaLinkedin className="h-5 w-5" />,
       label: "LinkedIn",
-      value: "Connect professionally",
+      value: "Let's connect",
       href: contact.linkedin,
-      tint: "text-[#0A66C2] bg-[#0A66C2]/10 border-[#0A66C2]/20 dark:text-[#4a9be8]",
+      tint: "text-[#5aa9f0] bg-[#5aa9f0]/15",
       external: true,
     },
     {
@@ -65,7 +64,7 @@ export default function ContactFooter() {
       label: "Upwork",
       value: "Hire me on Upwork",
       href: contact.upwork,
-      tint: "text-[#14A800] bg-[#14A800]/10 border-[#14A800]/20",
+      tint: "text-[#6fda44] bg-[#6fda44]/15",
       external: true,
     },
   ];
@@ -126,56 +125,54 @@ export default function ContactFooter() {
 
   return (
     <>
-      <section id="contact" className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:py-32">
-        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-          <div className="absolute bottom-0 left-1/2 h-[480px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[180px]" />
-        </div>
+      <section id="contact" className="relative scroll-mt-20 px-4 py-20 sm:px-8 md:py-28">
+        <Reveal className="mx-auto max-w-6xl">
+          {/* Stays dark in both themes so it reads as the page's closing moment */}
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0f1e] p-5 shadow-[var(--shadow-lg)] sm:p-8 lg:p-10">
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              <div className="animate-aurora absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#2f6bff]/35 blur-[110px]" />
+              <div className="animate-aurora-slow absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-[#2dd4bf]/20 blur-[110px]" />
+            </div>
 
-        <div className="mx-auto max-w-6xl">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Contact"
-              align="center"
-              title={<>Let&apos;s build something <span className="text-gradient font-serif-accent">great together.</span></>}
-              description="Have a project, a product idea or a role to fill? Send me a message and I'll get back to you soon."
-            />
-          </Reveal>
+            <div className="relative grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
+              {/* Pitch and direct channels */}
+              <div className="flex flex-col p-1 text-white sm:p-2">
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Available for new work
+                </span>
+                <h2 className="mt-5 text-4xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-5xl">
+                  Let&apos;s build something{" "}
+                  <span className="font-serif-accent bg-gradient-to-r from-[#7aa2ff] to-[#2dd4bf] bg-clip-text text-transparent">great together.</span>
+                </h2>
+                <p className="mt-4 max-w-md text-base leading-relaxed text-white/65">
+                  Have a project, a product idea or a role to fill? Send me a message and I&apos;ll get back to you soon.
+                </p>
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-            {/* Direct channels */}
-            <Reveal delay={0.05}>
-              <div className="flex h-full flex-col gap-3">
-                {channels.map((c) => (
-                  <a
-                    key={c.label}
-                    href={c.href}
-                    {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="surface surface-hover group flex items-center gap-4 rounded-2xl p-5"
-                  >
-                    <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border ${c.tint}`}>
-                      {c.icon}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm font-semibold text-foreground">{c.label}</div>
-                      <div className="truncate text-sm text-muted-foreground">{c.value}</div>
-                    </div>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
-                  </a>
-                ))}
-
-                <div className="mt-auto flex items-start gap-3 rounded-2xl border border-dashed border-border p-5">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Based in <span className="font-medium text-foreground">Karachi (PKT, UTC+5)</span> — happy to work
-                    across time zones with clients in Europe, the Middle East, Africa and North America.
-                  </p>
+                <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  {channels.map((c, i) => (
+                    <a
+                      key={c.label}
+                      href={c.href}
+                      {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className={`group flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.09] ${i === 0 ? "sm:col-span-2" : ""}`}
+                    >
+                      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.tint}`}>{c.icon}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold">{c.label}</span>
+                        <span className="block truncate text-xs text-white/55">{c.value}</span>
+                      </span>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-white/40 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
+                    </a>
+                  ))}
                 </div>
-              </div>
-            </Reveal>
 
-            {/* Form */}
-            <Reveal delay={0.1}>
-              <form onSubmit={onSubmit} className="surface rounded-3xl p-6 shadow-[var(--shadow-md)] sm:p-8">
+                <p className="mt-auto pt-6 text-xs leading-relaxed text-white/45">
+                  Based in Karachi (PKT, UTC+5). Happy to work across time zones.
+                </p>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={onSubmit} className="surface rounded-3xl p-6 shadow-[var(--shadow-lg)] sm:p-8">
                 <h3 className="text-lg font-semibold tracking-tight text-foreground">Tell me about your project</h3>
                 <p className="mt-1 text-sm text-muted-foreground">A few details help me reply with something useful.</p>
 
@@ -208,7 +205,7 @@ export default function ContactFooter() {
                     <textarea
                       name="message"
                       required
-                      rows={5}
+                      rows={8}
                       placeholder="What are you building, who is it for, and when do you need it?"
                       className={`${inputCls} resize-y`}
                     />
@@ -256,9 +253,9 @@ export default function ContactFooter() {
                   )}
                 </div>
               </form>
-            </Reveal>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <footer className="border-t border-border px-5 pb-10 pt-14 sm:px-8">

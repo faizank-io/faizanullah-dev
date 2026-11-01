@@ -7,7 +7,7 @@ const projectsDir = path.join(__dirname, "../public/projects");
 const newTargets = [
   { name: "auctune", url: "https://auctune.webdemodesigns.co/" },
   { name: "yak-and-go", url: "https://yak-and-go-vercel-deployment.vercel.app/" },
-  { name: "crmlogy", url: "https://crmlogy.devop360.com/" },
+  { name: "crmlogy", url: "https://crmlogy.com/" },
   { name: "discountslife", url: "https://discountslife.com/" },
   { name: "nutrinaturals", url: "https://www.nutrinaturals.org" },
   { name: "transitionthewarrior", url: "https://transitionthewarrior.org/" },

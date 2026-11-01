@@ -75,7 +75,6 @@ export const metadata = {
     "Hire React Developer Pakistan",
     "Remote Full Stack Engineer",
     "Freelance Full Stack Developer",
-    "CRMLogy",
     "Leja Book",
     "Digistore Direct",
     "IDAA Assessment",

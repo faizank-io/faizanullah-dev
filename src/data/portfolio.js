@@ -34,6 +34,10 @@ import {
   Store,
   Wallet,
   Bot,
+  Plane,
+  Mountain,
+  CarFront,
+  CodeXml,
 } from "lucide-react";
 
 export const portfolioData = {
@@ -105,6 +109,10 @@ export const portfolioData = {
     "nutrinaturals",
     "paulswindowcleaning",
     "yak-and-go",
+    "irouda-booking",
+    "irouda-evasion",
+    "bilalmotors",
+    "pyrobytes",
     "hotel-booking-app",
     "ride-hailing-rider-app",
     "ride-hailing-driver-app",
@@ -114,6 +122,15 @@ export const portfolioData = {
     "attendance-app",
     "hr-payroll-app",
     "ecommerce-vendor-app",
+  ],
+  // Only listed after "View all", in every tab, and left out of search indexing.
+  collapsedProjects: [
+    "irouda-booking",
+    "irouda-evasion",
+    "5brain",
+    "nexusstudent",
+    "crmlogy",
+    "printprima",
   ],
   projectCategories: [
     "All",
@@ -362,9 +379,57 @@ export const portfolioData = {
       tags: ["Laravel", "PHP", "MySQL", "SaaS", "Multi-Tenancy", "REST API"],
       category: "SaaS & Enterprise",
       image: "/projects/crmlogy.png",
-      link: "https://crmlogy.devop360.com/",
+      link: "https://crmlogy.com/",
       badge: "Enterprise SaaS",
       icon: <Building2 className="w-5 h-5 text-indigo-400" />,
+    },
+    {
+      id: "irouda-booking",
+      title: "Irouda Évasion — Airport Transfer Booking",
+      description:
+        "Fixed-price private transfer booking from Geneva, Lyon and Grenoble airports to 17 French ski resorts, with vehicle availability, route pricing and English and French pages.",
+      tags: ["Laravel", "PHP", "Booking Engine", "EN / FR"],
+      category: "Live Websites & Apps",
+      image: "/projects/irouda-booking.png",
+      link: "https://booking.irouda-evasion.com/",
+      badge: "Live Booking Platform",
+      icon: <Plane className="w-5 h-5 text-sky-400" />,
+    },
+    {
+      id: "irouda-evasion",
+      title: "Irouda Évasion — Ski Transfer Company Website",
+      description:
+        "Company website for an Alpine transfer operator, presenting destinations with starting prices, the vehicle fleet, airport, corporate and chauffeur services, and direct booking and WhatsApp contact.",
+      tags: ["WordPress", "PHP", "SEO", "Multilingual"],
+      category: "Live Websites & Apps",
+      image: "/projects/irouda-evasion.png",
+      link: "https://irouda-evasion.com/",
+      badge: "Live Website",
+      icon: <Mountain className="w-5 h-5 text-blue-400" />,
+    },
+    {
+      id: "bilalmotors",
+      title: "Bilal Motors — Car Marketplace & Auctions",
+      description:
+        "Pakistani automotive marketplace for buying and selling used cars, with search by make and city, live auctions, professional inspections, free ads and dealer accounts.",
+      tags: ["Laravel", "PHP", "MySQL", "Marketplace", "Live Auctions"],
+      category: "Live Websites & Apps",
+      image: "/projects/bilalmotors.png",
+      link: "https://bilalmotors.com/",
+      badge: "Live Marketplace",
+      icon: <CarFront className="w-5 h-5 text-red-400" />,
+    },
+    {
+      id: "pyrobytes",
+      title: "PyroBytes — Software Company Website",
+      description:
+        "Corporate website for a Texas-based software company, presenting web, mobile, cloud and AI services with an animated interface and a clear client process.",
+      tags: ["Corporate Website", "Responsive UI", "Animations", "SEO"],
+      category: "Live Websites & Apps",
+      image: "/projects/pyrobytes.png",
+      link: "https://pyrobytes.com/",
+      badge: "Live Website",
+      icon: <CodeXml className="w-5 h-5 text-violet-400" />,
     },
     {
       id: "hotel-booking-app",

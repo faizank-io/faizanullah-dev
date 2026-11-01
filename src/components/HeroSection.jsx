@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Download, MapPin } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download, MapPin, Layers } from "lucide-react";
 import { FaGithub, FaLinkedin, FaUpwork } from "react-icons/fa6";
 import {
   SiReact, SiNextdotjs, SiJavascript, SiTailwindcss, SiNodedotjs, SiExpress,
@@ -30,6 +30,16 @@ const marquee = [
   { name: "Python Flask", icon: <SiPython className="text-[#3776AB]" /> },
 ];
 
+// Six logos evenly spaced on the ring around the portrait.
+const orbit = [
+  { left: "50%", top: "0%", icon: <SiReact className="text-[#61DAFB]" /> },
+  { left: "93.3%", top: "25%", icon: <SiNodedotjs className="text-[#5FA04E]" /> },
+  { left: "93.3%", top: "75%", icon: <SiLaravel className="text-[#FF2D20]" /> },
+  { left: "50%", top: "100%", icon: <SiNextdotjs className="text-foreground" /> },
+  { left: "6.7%", top: "75%", icon: <SiPhp className="text-[#777BB4]" /> },
+  { left: "6.7%", top: "25%", icon: <SiMysql className="text-[#4479A1]" /> },
+];
+
 export default function HeroSection() {
   const { profile, stats, projects } = portfolioData;
   const years = getYearsOfExperience();
@@ -51,8 +61,8 @@ export default function HeroSection() {
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         <div className="grid-bg absolute inset-0 opacity-70" />
-        <div className="absolute -top-40 left-1/2 h-[620px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
-        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-accent/10 blur-[150px]" />
+        <div className="animate-aurora absolute -left-[10%] -top-40 h-[560px] w-[720px] rounded-full bg-primary/15 blur-[150px]" />
+        <div className="animate-aurora-slow absolute right-[-8%] top-[20%] h-[480px] w-[560px] rounded-full bg-accent/15 blur-[150px]" />
       </div>
 
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
@@ -77,7 +87,20 @@ export default function HeroSection() {
             className="mt-3 text-[clamp(2.3rem,5.4vw,4.4rem)] font-bold leading-[1.04] tracking-[-0.035em] text-foreground"
           >
             I build fast, scalable web apps that{" "}
-            <span className="text-gradient font-serif-accent pr-1">grow businesses.</span>
+            <span className="relative inline-block whitespace-nowrap pb-2">
+              <span className="text-gradient font-serif-accent pr-1">grow businesses.</span>
+              <svg className="absolute -bottom-1 left-0 h-3 w-full" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                <motion.path
+                  d="M2 9C60 3 150 2 298 7"
+                  stroke="var(--accent)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.1, delay: 0.9, ease }}
+                />
+              </svg>
+            </span>
           </motion.h1>
 
           <motion.p {...f(0.25)} className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -89,7 +112,7 @@ export default function HeroSection() {
           <motion.div {...f(0.35)} className="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#contact"
-              className="group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_var(--primary)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_-10px_var(--primary)]"
+              className="btn-shine group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_var(--primary)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_-10px_var(--primary)]"
             >
               Start a project
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -110,16 +133,6 @@ export default function HeroSection() {
               Resume
             </a>
           </motion.div>
-
-          <motion.dl {...f(0.45)} className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-border pt-8 sm:grid-cols-4">
-            {heroStats.map((s) => (
-              <div key={s.label}>
-                <dt className="sr-only">{s.label}</dt>
-                <dd className="text-3xl font-bold tracking-tight text-foreground">{s.value}</dd>
-                <dd className="mt-1 text-xs font-medium leading-snug text-muted-foreground">{s.label}</dd>
-              </div>
-            ))}
-          </motion.dl>
         </div>
 
         {/* Portrait */}
@@ -132,9 +145,25 @@ export default function HeroSection() {
           {/* The cut-out portrait "rises" out of a gradient circle: the circle sits in the
               bottom square of a 1:1.2 box, and the photo is clipped only along the circle's lower half. */}
           <div className="relative aspect-[1/1.2]">
-            <div className="absolute inset-x-[-6%] bottom-[-4%] aspect-square rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
-            <div className="absolute inset-x-[-5%] bottom-[-5%] aspect-square rounded-full border border-border" aria-hidden="true" />
-            <div className="absolute inset-x-0 bottom-0 aspect-square rounded-full border border-border bg-gradient-to-b from-elevated to-muted shadow-[var(--shadow-md)]" aria-hidden="true" />
+            <div className="absolute inset-x-[-8%] bottom-[-6%] aspect-square rounded-full bg-gradient-to-br from-primary/20 to-accent/20 blur-3xl" aria-hidden="true" />
+            {/* Gradient ring with logos travelling around it, behind the portrait */}
+            <div className="absolute inset-x-[-7%] bottom-[-7%] aspect-square animate-[spin_45s_linear_infinite]" aria-hidden="true">
+              <div className="absolute inset-0 rounded-full p-px [background:conic-gradient(from_0deg,transparent,var(--primary),transparent_35%,var(--accent),transparent_70%)]">
+                <div className="h-full w-full rounded-full bg-background" />
+              </div>
+              {orbit.map((o, i) => (
+                <span
+                  key={i}
+                  style={{ left: o.left, top: o.top }}
+                  className="absolute hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 sm:block"
+                >
+                  <span className="flex h-full w-full animate-[spin_45s_linear_infinite_reverse] items-center justify-center rounded-full border border-border bg-card text-lg shadow-[var(--shadow-sm)]">
+                    {o.icon}
+                  </span>
+                </span>
+              ))}
+            </div>
+            <div className="absolute inset-x-0 bottom-0 aspect-square rounded-full border border-border bg-gradient-to-b from-card to-muted shadow-[var(--shadow-md)]" aria-hidden="true" />
             <div className="absolute inset-0 overflow-hidden [border-radius:0_0_50%_50%/0_0_41.667%_41.667%]">
               <div className="absolute bottom-0 left-1/2 aspect-square w-[112%] -translate-x-1/2">
                 <Image
@@ -159,11 +188,7 @@ export default function HeroSection() {
 
             {/* Floating: stack */}
             <div className="animate-float-delayed glass absolute -bottom-4 -right-8 z-10 hidden items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-[var(--shadow-md)] sm:flex">
-              <div className="flex -space-x-1.5 text-lg">
-                {[<SiReact key="r" className="text-[#61DAFB]" />, <SiNodedotjs key="n" className="text-[#5FA04E]" />, <SiLaravel key="l" className="text-[#FF2D20]" />].map((icon, i) => (
-                  <span key={i} className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card">{icon}</span>
-                ))}
-              </div>
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Layers className="h-4 w-4" /></span>
               <div className="leading-tight">
                 <div className="text-xs font-semibold text-foreground">Full Stack</div>
                 <div className="text-[11px] text-muted-foreground">Frontend → API → DB</div>
@@ -171,7 +196,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="mt-10 hidden items-center justify-center gap-2 sm:flex">
+          <div className="mt-20 hidden items-center justify-center gap-2 sm:flex">
             {[
               { label: "GitHub", href: profile.contact.github, icon: <FaGithub className="h-4 w-4" /> },
               { label: "LinkedIn", href: profile.contact.linkedin, icon: <FaLinkedin className="h-4 w-4" /> },
@@ -192,8 +217,20 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
+      {/* Stats */}
+      <div className="mx-auto mt-14 max-w-6xl px-5 sm:px-8">
+        <motion.dl {...f(0.45)} className="glass grid grid-cols-2 overflow-hidden rounded-3xl border border-border shadow-[var(--shadow-md)] lg:grid-cols-4">
+          {heroStats.map((stat) => (
+            <div key={stat.label} className="flex flex-col-reverse border-border p-6 text-center [&:nth-child(even)]:border-l [&:nth-child(n+3)]:border-t sm:p-7 lg:border-t-0 lg:[&:not(:first-child)]:border-l">
+              <dt className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">{stat.label}</dt>
+              <dd className="text-gradient text-4xl font-bold tracking-tight">{stat.value}</dd>
+            </div>
+          ))}
+        </motion.dl>
+      </div>
+
       {/* Tech marquee */}
-      <motion.div {...f(0.6)} className="marquee mask-fade-x mt-20 overflow-hidden border-y border-border bg-card/40 py-5">
+      <motion.div {...f(0.6)} className="marquee mask-fade-x mt-14 overflow-hidden py-5">
         <div className="animate-marquee flex w-max items-center">
           {[...marquee, ...marquee].map((t, i) => (
             <span

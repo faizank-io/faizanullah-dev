@@ -5,7 +5,7 @@ const path = require("path");
 const projectsDir = path.join(__dirname, "../public/projects");
 
 const remaining = [
-  { name: "crmlogy", url: "https://crmlogy.devop360.com/" },
+  { name: "crmlogy", url: "https://crmlogy.com/" },
   { name: "discountslife", url: "https://discountslife.com/" },
   { name: "nutrinaturals", url: "https://www.nutrinaturals.org" },
 ];

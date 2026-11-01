@@ -120,6 +120,16 @@ body {
   50% { transform: translateY(-8px); }
 }
 
+@keyframes aurora {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(4%, -6%, 0) scale(1.12); }
+}
+
+@keyframes shine {
+  from { transform: translateX(-130%) skewX(-20deg); }
+  to { transform: translateX(260%) skewX(-20deg); }
+}
+
 @layer components {
 /* ─── Utilities ─── */
 
@@ -177,6 +187,35 @@ body {
 
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-float-delayed { animation: float 6s ease-in-out 3s infinite; }
+
+.animate-aurora { animation: aurora 16s ease-in-out infinite; }
+.animate-aurora-slow { animation: aurora 24s ease-in-out -8s infinite; }
+
+/* Light sweep across a primary button on hover */
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-130%) skewX(-20deg);
+}
+.btn-shine:hover::after { animation: shine 0.9s ease; }
+
+/* Soft light that follows the cursor; --x and --y are set from JS */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(340px circle at var(--x, 50%) var(--y, 50%), color-mix(in srgb, var(--primary) 14%, transparent), transparent 70%);
+  transition: opacity 0.35s ease;
+}
+.spotlight:hover::before { opacity: 1; }
 
 /* Nav */
 .nav-link { position: relative; }

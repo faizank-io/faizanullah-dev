@@ -38,7 +38,7 @@ const studies = [
     icon: <Shield className="h-5 w-5" />,
     tag: "Multi-Tenant",
     title: "Tenant Data Isolation in SaaS CRM",
-    problem: "CRMLogy needed strict data isolation between agency tenants sharing a single database. Cross-tenant leaks were unacceptable.",
+    problem: "A multi-tenant agency CRM needed strict data isolation between agency tenants sharing a single database. Cross-tenant leaks were unacceptable.",
     solution: "Middleware-based tenant scoping: TenantScope global scope on all models, subdomain/header-based context resolution, composite indexes, audit logging.",
     impact: ["Zero cross-tenant incidents (5 tenants)", "Onboarding: 2 days → 15 min", "Performance maintained with indexes"],
     tech: ["Laravel", "Eloquent Scopes", "MySQL", "Middleware"],

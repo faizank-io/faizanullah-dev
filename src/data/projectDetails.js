@@ -1,5 +1,6 @@
 import { mobileAppDetails } from "./mobileAppDetails";
 import { aiProjectDetails } from "./aiProjectDetails";
+import { webProjectDetails } from "./webProjectDetails";
 
 const baseProjectDetails = {
   printprima: {
@@ -1816,7 +1817,7 @@ module.exports = router;`,
   crmlogy: {
     title: "CRMLogy — Enterprise CRM & Sales SaaS",
     subtitle: "Multi-Tenant Agency CRM with Automated Pipelines",
-    liveUrl: "https://crmlogy.devop360.com/",
+    liveUrl: "https://crmlogy.com/",
     githubUrl: null,
     techStack: ["Laravel", "PHP 8.1", "MySQL", "Pusher", "REST API", "Multi-Tenancy", "Redis", "Sanctum"],
     badge: "Enterprise SaaS",
@@ -2029,7 +2030,7 @@ class FCMNotificationService
   },
 };
 
-export const projectDetails = { ...baseProjectDetails, ...mobileAppDetails, ...aiProjectDetails };
+export const projectDetails = { ...baseProjectDetails, ...mobileAppDetails, ...aiProjectDetails, ...webProjectDetails };
 
 export function getProjectDetail(id) {
   return projectDetails[id] || null;

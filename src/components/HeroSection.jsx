@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Download, MapPin } from "lucide-react";
-import { FaGithub, FaLinkedin } from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaUpwork } from "react-icons/fa6";
 import {
   SiReact, SiNextdotjs, SiJavascript, SiTailwindcss, SiNodedotjs, SiExpress,
   SiPhp, SiLaravel, SiMysql, SiPostgresql, SiRedis, SiDocker, SiStripe, SiPython,
@@ -136,7 +136,7 @@ export default function HeroSection() {
             <div className="absolute inset-x-[-5%] bottom-[-5%] aspect-square rounded-full border border-border" aria-hidden="true" />
             <div className="absolute inset-x-0 bottom-0 aspect-square rounded-full border border-border bg-gradient-to-b from-elevated to-muted shadow-[var(--shadow-md)]" aria-hidden="true" />
             <div className="absolute inset-0 overflow-hidden [border-radius:0_0_50%_50%/0_0_41.667%_41.667%]">
-              <div className="absolute bottom-0 left-1/2 aspect-square w-[112%] -translate-x-[57%]">
+              <div className="absolute bottom-0 left-1/2 aspect-square w-[112%] -translate-x-1/2">
                 <Image
                   src={profile.photo}
                   alt={`${profile.name} — ${profile.role}`}
@@ -175,6 +175,7 @@ export default function HeroSection() {
             {[
               { label: "GitHub", href: profile.contact.github, icon: <FaGithub className="h-4 w-4" /> },
               { label: "LinkedIn", href: profile.contact.linkedin, icon: <FaLinkedin className="h-4 w-4" /> },
+              { label: "Upwork", href: profile.contact.upwork, icon: <FaUpwork className="h-4 w-4" /> },
             ].map((s) => (
               <a
                 key={s.label}

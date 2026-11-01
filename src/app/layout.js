@@ -138,7 +138,7 @@ const jsonLd = {
       name: "Faizan Ullah",
       alternateName: ["Faizan Ullah Dev", "faizanullahdevs", "Faizan Full Stack Developer"],
       jobTitle: "Full Stack Engineer",
-      image: `${siteUrl}/faizan-ullah-photo.png`,
+      image: `${siteUrl}/faizan-ullah-profile.jpg`,
       address: {
         "@type": "PostalAddress",
         addressLocality: "Karachi",
@@ -151,6 +151,7 @@ const jsonLd = {
       url: siteUrl,
       sameAs: [
         "https://www.linkedin.com/in/faizan-fullstack-engineer",
+        "https://www.upwork.com/freelancers/~014ee530a10868f75c",
         "https://github.com/faizanullah-dev",
       ],
       email: "faizanullah.dev5@gmail.com",

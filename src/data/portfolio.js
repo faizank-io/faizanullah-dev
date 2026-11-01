@@ -41,7 +41,7 @@ export const portfolioData = {
     name: "Faizan Ullah",
     role: "Full Stack Engineer",
     location: "Karachi, Pakistan",
-    photo: "/faizan-ullah-portrait.png",
+    photo: "/faizan-ullah-headshot.png",
     summary:
       "Full Stack Engineer with expertise in React.js, Next.js, Node.js, PHP, and Laravel. Passionate about building fast, scalable web applications end to end — from responsive frontends to secure RESTful APIs, optimized databases, and AI integrations.",
     contact: {
@@ -50,6 +50,7 @@ export const portfolioData = {
       phoneDisplay: "+92 313 005 6857",
       whatsapp: "https://wa.me/923130056857",
       linkedin: "https://www.linkedin.com/in/faizan-fullstack-engineer",
+      upwork: "https://www.upwork.com/freelancers/~014ee530a10868f75c",
       github: "https://github.com/faizanullah-dev",
     },
   },

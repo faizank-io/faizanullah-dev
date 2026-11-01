@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, Phone, ArrowUpRight, ArrowUp, Send, Clock, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { FaWhatsapp, FaLinkedin, FaGithub } from "react-icons/fa6";
+import { FaWhatsapp, FaLinkedin, FaGithub, FaUpwork } from "react-icons/fa6";
 import { portfolioData } from "@/data/portfolio";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -60,6 +60,14 @@ export default function ContactFooter() {
       tint: "text-[#0A66C2] bg-[#0A66C2]/10 border-[#0A66C2]/20 dark:text-[#4a9be8]",
       external: true,
     },
+    {
+      icon: <FaUpwork className="h-5 w-5" />,
+      label: "Upwork",
+      value: "Hire me on Upwork",
+      href: contact.upwork,
+      tint: "text-[#14A800] bg-[#14A800]/10 border-[#14A800]/20",
+      external: true,
+    },
   ];
 
   const onSubmit = async (e) => {
@@ -111,6 +119,7 @@ export default function ContactFooter() {
   const socials = [
     { label: "GitHub", href: contact.github, icon: <FaGithub className="h-4 w-4" /> },
     { label: "LinkedIn", href: contact.linkedin, icon: <FaLinkedin className="h-4 w-4" /> },
+    { label: "Upwork", href: contact.upwork, icon: <FaUpwork className="h-4 w-4" /> },
     { label: "WhatsApp", href: contact.whatsapp, icon: <FaWhatsapp className="h-4 w-4" /> },
     { label: "Email", href: `mailto:${contact.email}`, icon: <Mail className="h-4 w-4" /> },
   ];

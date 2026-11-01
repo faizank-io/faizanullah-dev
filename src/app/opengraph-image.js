@@ -12,7 +12,7 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
-  const photo = await readFile(join(process.cwd(), "public/faizan-ullah-portrait.png"), "base64");
+  const photo = await readFile(join(process.cwd(), "public/faizan-ullah-headshot.png"), "base64");
   const photoSrc = `data:image/png;base64,${photo}`;
 
   return new ImageResponse(
@@ -104,7 +104,7 @@ export default async function Image() {
             display: "flex",
             padding: "10px",
             borderRadius: "40px",
-            background: "linear-gradient(135deg, #5b8cff, #2dd4bf)",
+            background: "linear-gradient(180deg, #1b2336, #111726)",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
